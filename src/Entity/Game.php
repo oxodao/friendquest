@@ -34,11 +34,21 @@ class Game {
      */
     private $isFirstPlayerTurn;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="game")
+     */
+    private $answers;
+
     public function __construct(User $firstPlayer)
     {
         $this->id = Uuid::uuid4();
         $this->firstPlayer = $firstPlayer;
         $this->isFirstPlayerTurn = true;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function getFirstPlayer(): User
@@ -72,6 +82,21 @@ class Game {
     {
         $this->isFirstPlayerTurn = !$this->isFirstPlayerTurn;
         return $this;
+    }
+
+    public function getAnswers(): array
+    {
+        return $this->answers;
+    }
+
+    public function getLastAnswers(): array
+    {
+        $cnt = count($this->answers);
+        if ($cnt > 6) {
+            return array_splice($this->answers, $cnt - 6, 6);
+        }
+
+        return $this->answers;
     }
 
 }

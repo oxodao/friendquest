@@ -6,6 +6,9 @@ run:
 cli:
 	docker-compose exec php ash
 
+db:
+	docker-compose exec database psql -d friendsquest -U friendsquest
+
 reset:
 	docker-compose exec php ash reset.sh
 

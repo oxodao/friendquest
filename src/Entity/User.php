@@ -130,7 +130,7 @@ class User implements UserInterface, \Serializable
 
     public function getFriendRequests()
     {
-        return array_udiff($this->friendsWithMe->toArray(), $this->friends->toArray(), function($a, $b) {
+        return array_udiff($this->friendsWithMe->toArray(), $this->friends->toArray(), function ($a, $b) {
             return $a->getId() === $b->getId() ? 0 : -1;
         });
     }
@@ -162,6 +162,26 @@ class User implements UserInterface, \Serializable
         return array_merge($this->initializedGames->toArray(), $this->joinedGames->toArray());
     }
 
+    /**
+     * Tries to find the game by id
+     */
+    public function getGame(string $id): ?Game
+    {
+        foreach ($this->initializedGames->toArray() as $game) {
+            if ($id === $game->getId()) {
+                return $game;
+            }
+        }
+
+        foreach ($this->joinedGames->toArray() as $game) {
+            if ($id === $game->getId()) {
+                return $game;
+            }
+        }
+
+        return null;
+    }
+
     public function getSalt(): ?string
     {
         // We are using bcrypt, so no need for salt
@@ -175,9 +195,9 @@ class User implements UserInterface, \Serializable
     public function serialize(): string
     {
         return serialize([
-           $this->id,
-           $this->username,
-           $this->password
+            $this->id,
+            $this->username,
+            $this->password
         ]);
     }
 

@@ -7,6 +7,7 @@ namespace App\Controller;
 
 use App\Entity\Game;
 use App\Entity\User;
+use App\Response\ErrorResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,24 @@ class GameController extends Controller
         }
 
         return new JsonResponse($games);
+    }
+
+    /**
+     * @Route("/api/games/{id}", methods={"GET"})
+     */
+    public function getOneGame(string $id): Response
+    {
+        $user = $this->getUser();
+        $game = $user->getGame($id);
+
+        if ($game !== null) {
+            return new JsonResponse([
+                "id" => $game->getId(),
+                "isFirstPlayerTurn" => $game->isFirstPlayerTurn(),
+            ]);
+        }
+
+        return new ErrorResponse(404, "You don't have a game with this ID");
     }
 
 }
