@@ -5,7 +5,7 @@ services:
   nginx:
     build:
       context: ./docker/dev/nginx
-    env_file: .env
+    env_file: env
     ports:
       - "80:80"
     links:
@@ -16,7 +16,7 @@ services:
   php:
     build:
       context: ./docker/dev/php
-    env_file: .env
+    env_file: env
     links:
       - database
       - mailcatcher
@@ -27,7 +27,7 @@ services:
     image: postgres:10.3-alpine
     volumes:
       - db:/var/lib/postgresql/data
-    env_file: .env
+    env_file: env
 
   adminer:
    image: adminer
