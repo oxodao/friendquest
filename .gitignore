@@ -51,6 +51,9 @@
 # Embedded web-server pid file
 /.web-server-pid
 
-
+# Environment files containing the config and more importantly crendentials
 .env
 .env.prod
+
+# Private key for user management
+/config/jwt/*.pem
