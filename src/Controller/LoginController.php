@@ -15,12 +15,12 @@ class LoginController
 {
 
     /**
-     * @Route("/api/test")
+     * @Route("/register")
      */
-    public function test(Request $rq)
+    public function register(Request $rq)
     {
-        $ui = $rq->getUserInfo();
-        $u = $rq->getUser();
-        return new ErrorResponse(200, "logged as $ui, $u");
+        /**
+         * @TODO
+         */
     }
 }

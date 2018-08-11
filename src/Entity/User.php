@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -38,6 +39,20 @@ class User implements UserInterface, \Serializable
     private $email;
 
     /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
+     * @ORM\JoinTable(name="friends",
+     *          joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *          inverseJoinColumns={@ORM\JoinColumn(name="friend_user_id", referencedColumnName="id")}
+     *      )
+     */
+    private $friends;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="friends")
+     */
+    private $friendsWithMe;
+
+    /**
      * @ORM\Column(type="simple_array")
      */
     protected $roles;
@@ -45,6 +60,8 @@ class User implements UserInterface, \Serializable
     public function __construct()
     {
         $this->id = Uuid::uuid4();
+        $this->friends = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->friendsWithMe = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId(): string
@@ -94,6 +111,33 @@ class User implements UserInterface, \Serializable
     {
         $this->roles = $roles;
         return $this;
+    }
+
+    public function getFriends()
+    {
+        return $this->friends;
+    }
+
+    public function getFriendRequests()
+    {
+        return array_udiff($this->friendsWithMe->toArray(), $this->friends->toArray(), function($a, $b) {
+            return $a->getId() === $b->getId() ? 0 : -1;
+        });
+    }
+
+    public function addFriend(User $user): User
+    {
+        $this->friends->add($user);
+        return $this;
+    }
+
+    public function removeFriend(User $user): bool
+    {
+        if ($this->friends->contains($user)) {
+            $this->friends->removeElement($user);
+            return true;
+        }
+        return false;
     }
 
     public function getSalt(): ?string
