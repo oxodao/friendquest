@@ -17,20 +17,26 @@ security:
             security: false
 
         login:
-          anonymous: ~
           pattern: ^/login
-
+          stateless: true
+          anonymous: true
           json_login:
-            check_path: login
+            check_path: /login_check
+            success_handler: lexik_jwt_authentication.handler.authentication_success
+            failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
           provider: friendsquest_provider
 
         main:
             pattern: ^/api
-            anonymous: ~
-
+            stateless: true
+            anonymous: false
             provider: friendsquest_provider
+            guard:
+              authenticators:
+                - lexik_jwt_authentication.jwt_token_authenticator
 
     access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/, role: ROLE_USER }
         - { path: ^/admin/, role: ROLE_ADMIN }

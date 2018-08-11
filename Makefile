@@ -1,4 +1,4 @@
-start: run reset
+start: run assets reset
 
 run:
 	docker-compose up -d
@@ -8,6 +8,12 @@ cli:
 
 reset:
 	docker-compose exec php ash reset.sh
+
+assets:
+	docker-compose exec php composer install
+
+logs:
+	docker-compose logs -f
 
 stop:
 	docker-compose stop

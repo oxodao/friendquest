@@ -15,13 +15,6 @@ class LoginController
 {
 
     /**
-     * @Route("/login", name="login")
-     */
-    public function login(Request $request): Response
-    {
-    }
-
-    /**
      * @Route("/api/test")
      */
     public function test(Request $rq)
