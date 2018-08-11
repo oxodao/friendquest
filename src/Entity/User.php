@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -37,6 +36,17 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=254, unique=true, nullable=true)
      */
     private $email;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Game", mappedBy="firstPlayer")
+     */
+    private $initializedGames;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Game", mappedBy="secondPlayer")
+     */
+    private $joinedGames;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
@@ -125,6 +135,10 @@ class User implements UserInterface, \Serializable
         });
     }
 
+    /**
+     * Add a friend to his lists
+     * Will also warn the other user that he has added him
+     */
     public function addFriend(User $user): User
     {
         $this->friends->add($user);
@@ -138,6 +152,14 @@ class User implements UserInterface, \Serializable
             return true;
         }
         return false;
+    }
+
+    /**
+     * Gives an array containing all games that the user is playing
+     */
+    public function getGames(): array
+    {
+        return array_merge($this->initializedGames->toArray(), $this->joinedGames->toArray());
     }
 
     public function getSalt(): ?string
