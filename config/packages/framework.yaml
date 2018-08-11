@@ -1,0 +1,14 @@
+framework:
+    templating:
+      engines: twig
+
+    secret: '%env(APP_SECRET)%'
+    session:
+        handler_id: ~
+
+    php_errors:
+        log: true
+
+    cache:
+        #app: cache.adapter.redis
+        #default_redis_provider: redis://localhost

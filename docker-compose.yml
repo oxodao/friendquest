@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+
+  nginx:
+    build:
+      context: ./docker/dev/nginx
+    env_file: .env
+    ports:
+      - "80:80"
+    links:
+      - php
+    volumes:
+      - .:/www
+
+  php:
+    build:
+      context: ./docker/dev/php
+    env_file: .env
+    links:
+      - database
+      - mailcatcher
+    volumes:
+      - .:/www
+
+  database:
+    image: postgres:10.3-alpine
+    volumes:
+      - db:/var/lib/postgresql/data
+    env_file: .env
+
+  adminer:
+   image: adminer
+   links:
+     - database
+   ports:
+     - 8080:8080
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - 1080:1080
+
+
+volumes:
+  db: ~
+

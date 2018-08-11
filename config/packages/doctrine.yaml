@@ -1,0 +1,29 @@
+parameters:
+    env(POSTGRES_HOST): ''
+    env(POSTGRES_PORT): 5432
+    env(POSTGRES_DB): 'friendsquest'
+    env(POSTGRES_USER): 'friendsquest'
+    env(POSTGRES_PASSWORD): 'friendsquest'
+
+doctrine:
+    dbal:
+        driver: 'pdo_pgsql'
+        server_version: '10.4'
+        host: '%env(POSTGRES_HOST)%'
+        port: '%env(POSTGRES_PORT)%'
+        dbname: '%env(POSTGRES_DB)%'
+        user: '%env(POSTGRES_USER)%'
+        password: '%env(POSTGRES_PASSWORD)%'
+        charset: UTF8
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+        mappings:
+            App:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Entity'
+                prefix: 'App\Entity'
+                alias: App
