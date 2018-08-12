@@ -1,7 +1,7 @@
-import {GET_TOKEN, READ_TOKEN, DELETE_TOKEN, UPDATE_TYPED_CRED, LOGIN} from "../actions/token_actions";
-import jwt_decode                                                      from "jwt-decode";
-import User                                                            from '../model/User';
-import {NO_TOKEN_AVAILABLE}                                            from '../middleware/LocalStorageMiddleware';
+import {GET_TOKEN, READ_TOKEN, DELETE_TOKEN, UPDATE_TYPED_CRED, LOGIN, SET_TOKEN} from "../actions/token_actions";
+import jwt_decode                                                                 from "jwt-decode";
+import User                                                                       from '../model/User';
+import {NO_TOKEN_AVAILABLE}                                                       from '../middleware/LocalStorageMiddleware';
 
 const initialState = {
     username: '',
@@ -15,8 +15,8 @@ export default function (state = initialState, action) {
         case UPDATE_TYPED_CRED:
             return {...state, ...action.payload};
         case LOGIN:
-            return {...state};
         case GET_TOKEN:
+        case SET_TOKEN:
             return {...state};
         case READ_TOKEN:
             if (NO_TOKEN_AVAILABLE === action.payload.token || undefined === action.payload.token || null === action.payload.token || 0 >= action.payload.token.length) {

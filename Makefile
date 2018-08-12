@@ -6,6 +6,9 @@ run:
 cli:
 	docker-compose exec php ash
 
+cli_yarn:
+	docker-compose exec nginx ash
+
 db:
 	docker-compose exec database psql -d friendsquest -U friendsquest
 

@@ -19,6 +19,16 @@ class Login extends Component {
         this.props.updateTyped(typed);
     }
 
+    keypressed(e) {
+        if (13 === e.keyCode) {
+           this.login();
+        }
+    }
+
+    login() {
+        this.props.login({username: this.props.username, password: this.props.password});
+    }
+
     componentDidMount() {
         if (null === this.props.user) {
             this.props.getToken();
@@ -47,12 +57,11 @@ class Login extends Component {
                         margin="normal"
                         value={this.props.password}
                         onChange={(a) => this.onChange(null, a.target.value)}
+                        onKeyDown={(e) => this.keypressed(e) }
                         fullWidth={true}
                     />
                 </div>
-                <Button variant="contained" color="primary" onClick={() => {
-                    this.props.login({username: this.props.username, password: this.props.password});
-                }}>
+                <Button variant="contained" color="primary" onClick={() => {this.login()}}>
                     Login
                 </Button>
             </div>

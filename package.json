@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^1.4.3",
+    "@material-ui/icons": "^2.0.1",
     "@symfony/webpack-encore": "^0.20.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
