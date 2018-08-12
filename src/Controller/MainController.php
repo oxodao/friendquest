@@ -22,4 +22,12 @@ class MainController extends Controller
         return $this->render('index.html.twig');
     }
 
+    /**
+     * @Route("/app")
+     */
+    public function app(): Response
+    {
+        return $this->render('app.html.twig');
+    }
+
 }

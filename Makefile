@@ -1,4 +1,4 @@
-start: run assets reset
+start: run libs reset assets
 
 run:
 	docker-compose up -d
@@ -13,7 +13,11 @@ reset:
 	docker-compose exec php ash reset.sh
 
 assets:
+	docker-compose exec nginx yarn run encore dev --watch
+
+libs:
 	docker-compose exec php composer install
+	docker-compose exec nginx yarn
 
 logs:
 	docker-compose logs -f

@@ -1,0 +1,26 @@
+{
+  "presets": [
+    "es2015",
+    "es2017",
+    "stage-1",
+    "stage-3",
+    "react",
+    [
+      "env",
+      {
+        "modules": false,
+        "targets": {
+          "browsers": [
+            ">0.25%"
+          ],
+          "uglify": true
+        },
+        "useBuiltIns": true
+      }
+    ]
+  ],
+  "plugins": [
+    "transform-runtime",
+    "transform-object-rest-spread",
+  ]
+}
