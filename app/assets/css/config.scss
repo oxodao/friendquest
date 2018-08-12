@@ -1,0 +1,9 @@
+$appWidth: 30em;
+
+%set-width {
+  width: $appWidth;
+
+  @media (max-width: 480px) {
+      width: 100%;
+  }
+}

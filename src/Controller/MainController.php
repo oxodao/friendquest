@@ -19,11 +19,12 @@ class MainController extends Controller
      */
     public function home(): Response
     {
-        return $this->render('index.html.twig');
+        //return $this->render('index.html.twig');
+        return $this->redirectToRoute('app');
     }
 
     /**
-     * @Route("/app")
+     * @Route("/app", name="app")
      */
     public function app(): Response
     {

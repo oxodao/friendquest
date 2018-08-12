@@ -1,3 +1,5 @@
+@import "config";
+
 * {
   box-sizing : border-box;
 }
@@ -9,16 +11,17 @@ body {
 }
 
 .App {
+  @extend %set-width;
+
   margin     : auto;
-  width      : 30em;
   height     : 100vh;
-  background : linear-gradient(90deg, rgba(72, 71, 96, 1) 0%, rgba(62, 62, 79, 1) 50%, rgba(61, 74, 77, 1) 100%);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+
 
   #Main_Header {
     flex: 0 0;
-    //background-color: ;//rgba(255, 255, 255, .3);
     background     : linear-gradient(to right, rgba(#ee32ff, .7) 0%, rgba(#898bff, .7) 100%);
     border-radius  : 0 0 10px 10px;
     box-shadow     : 0 0px 10px #111111;
