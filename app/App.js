@@ -1,12 +1,13 @@
-import React, {Component} from 'react';
-import Login              from './components/Login';
-import red                from "@material-ui/core/es/colors/red";
-import MuiThemeProvider   from "@material-ui/core/es/styles/MuiThemeProvider";
-import {createMuiTheme}   from '@material-ui/core/styles';
-import {connect}          from "react-redux";
-import SnackbarCustom     from "./components/SnackbarCustom";
-import FriendList         from "./components/FriendList";
-import NavBar             from './components/Navbar';
+import React, {Component}            from 'react';
+import {HashRouter as Router, Route} from 'react-router-dom';
+import Login                         from './components/Login';
+import red                           from "@material-ui/core/es/colors/red";
+import MuiThemeProvider              from "@material-ui/core/es/styles/MuiThemeProvider";
+import {createMuiTheme}              from '@material-ui/core/styles';
+import {connect}                     from "react-redux";
+import SnackbarCustom                from "./components/SnackbarCustom";
+import FriendList                    from "./components/FriendList";
+import NavBar                        from './components/Navbar';
 
 import UserImage from "./assets/images/default.svg";
 
@@ -38,8 +39,12 @@ class App extends Component {
             <MuiThemeProvider theme={createMuiTheme(theme)}>
                 <div className="App">
                     {header}
-                    <FriendList/>
-                    <Settings/>
+                    <Router>
+                        <div id="Router">
+                            <Route exact path="/" component={FriendList}/>
+                            <Route path="/settings" component={Settings}/>
+                        </div>
+                    </Router>
                     <NavBar/>
 
                     <Login/>
