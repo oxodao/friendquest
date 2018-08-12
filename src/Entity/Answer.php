@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Represents an answer to a question in a game
@@ -24,11 +25,13 @@ class Answer
      * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="NONE")
+     * @Groups({"Game"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"Game"})
      */
     private $count;
 
@@ -39,16 +42,19 @@ class Answer
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Question")
+     * @Groups({"Game"})
      */
     private $question;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"Game"})
      */
     private $state;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"Game"})
      */
     private $correctAnswer;
 

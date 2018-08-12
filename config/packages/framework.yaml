@@ -2,6 +2,9 @@ framework:
     templating:
       engines: twig
 
+    serializer:
+      enabled: true
+
     secret: '%env(APP_SECRET)%'
     session:
         handler_id: ~

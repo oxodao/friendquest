@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Standard user class
@@ -19,11 +20,13 @@ class User implements UserInterface, \Serializable
      * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="NONE")
+     * @Groups({"PlayerUUID", "Me", "Friend", "AddFriend" })
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
+     * @Groups({"Me", "Friend", "AddFriend" })
      */
     private $username;
 
@@ -34,6 +37,7 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=254, unique=true, nullable=true)
+     * @Groups({"Me"})
      */
     private $email;
 
@@ -49,16 +53,16 @@ class User implements UserInterface, \Serializable
     private $joinedGames;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
-     * @ORM\JoinTable(name="friends",
-     *          joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *          inverseJoinColumns={@ORM\JoinColumn(name="friend_user_id", referencedColumnName="id")}
-     *      )
+     * @ORM\OneToMany(targetEntity="App\Entity\Friendship", mappedBy="emitter", cascade={"persist"})
+     * @ORM\JoinColumn(name="emitter", referencedColumnName="id", onDelete="CASCADE")
+     * @Groups({"Me"})
      */
     private $friends;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="friends")
+     * @ORM\OneToMany(targetEntity="App\Entity\Friendship", mappedBy="receiver", cascade={"persist"})
+     * @ORM\JoinColumn(name="emitter", referencedColumnName="id", onDelete="CASCADE")
+     * @Groups({"Me"})
      */
     private $friendsWithMe;
 
@@ -123,35 +127,66 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getFriends()
+    public function getFriends(): array
     {
-        return $this->friends;
+        return $this->friends->toArray();
     }
 
-    public function getFriendRequests()
+    public function getFriendsWithMe(): array
     {
-        return array_udiff($this->friendsWithMe->toArray(), $this->friends->toArray(), function ($a, $b) {
-            return $a->getId() === $b->getId() ? 0 : -1;
-        });
+        return $this->friendsWithMe->toArray();
+    }
+
+    // No clue if it will be usefull
+    public function getFriendRequest()
+    {
+        return $this->friendsWithMe->filter(function (Friendship $frd) {
+            return $frd->getState() === Friendship::$STATE_PENDING;
+        })->toArray();
+    }
+
+    public function getFriendsAccepted()
+    {
+        $filterFunc = function (Friendship $frd) {
+            return $frd->getState() === Friendship::$STATE_ACCEPTED;
+        };
+
+        $myFriends = $this->friends->filter($filterFunc);
+        $friendsWithMe = $this->friendsWithMe->filter($filterFunc);
+
+        return array_merge($myFriends->toArray(), $friendsWithMe->toArray());
     }
 
     /**
      * Add a friend to his lists
      * Will also warn the other user that he has added him
      */
-    public function addFriend(User $user): User
+    public function addFriend(User $user): ?Friendship
     {
-        $this->friends->add($user);
-        return $this;
-    }
-
-    public function removeFriend(User $user): bool
-    {
-        if ($this->friends->contains($user)) {
-            $this->friends->removeElement($user);
-            return true;
+        // If we try to add ourself
+        if ($user === $this) {
+            return null;
         }
-        return false;
+
+        // If the user is already in my friendlist
+        // i.e; Already asked him (Either accepted or pending)
+        foreach ($this->friends->toArray() as $friendship) {
+            if ($friendship->getReceiver()->getId() === $user->getId()) {
+                return $friendship;
+            }
+        }
+
+        // If the user asked me, accept him
+        foreach ($this->friendsWithMe->toArray() as $friendship) {
+            if ($friendship->getEmitter()->getId() === $user->getId()) {
+                return $friendship->setState(Friendship::$STATE_ACCEPTED);
+            }
+        }
+
+        // Else, this is a new relationship
+        $friendship = (new Friendship($this, $user))->setState(Friendship::$STATE_PENDING);
+        $this->friends->add($friendship);
+        return $friendship;
     }
 
     /**

@@ -2,6 +2,7 @@
 namespace App\DataFixtures;
 
 
+use App\Entity\Friendship;
 use App\Entity\Game;
 use App\Entity\Question;
 use App\Entity\User;
@@ -27,6 +28,7 @@ class FQFixtures extends Fixture
 
     public function load(ObjectManager $om)
     {
+        /** @var User[] $users */
         $users = [];
 
         // Adding a user with it's email
@@ -40,6 +42,13 @@ class FQFixtures extends Fixture
 
             $om->persist($user);
         }
+
+        $users[3]->addFriend($users[4]);
+
+        for ($i = 2; $i < 4; $i++){
+            $om->persist($users[$i]);
+        }
+
 
         $game = new Game($users[0]);
         $game->setSecondPlayer($users[1]);

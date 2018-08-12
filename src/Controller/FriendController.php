@@ -7,42 +7,21 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Response\ErrorResponse;
+use App\Serialization\SerializedRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FriendController extends Controller
+class FriendController extends SerializerAwareController
 {
 
-    private function implodeFriends(array $friends, string $delim, User $user = null): string
-    {
-        $newArr = [];
-        /** @var User $friend */
-        foreach ($friends as $friend) {
-            $fName = $friend->getUsername();
-            if ($user != null && !$friend->getFriends()->contains($user)) {
-                $fName .= " (*)";
-            }
-            $newArr[] = $fName;
-        }
-
-        return implode($delim, $newArr);
-    }
-
     /**
-     * @Route("/api/friends", methods={"GET"})
+     * @Route("/api/me", methods={"GET"})
      */
-    public function friends(): Response
+    public function me(): Response
     {
-        /**
-         * @TODO: This is solely for debug purposes. Need to rewrite this asap to the final specs using Symfony's serializer
-         */
-        /** @var User $user */
-        $user = $this->getUser();
-
-        return new JsonResponse(["Mes amis" => $this->implodeFriends($user->getFriends()->toArray(), ', ', $user), "Ils m'ont ajoutés" => $this->implodeFriends($user->getFriendRequests(), ', ')]);
+        return new SerializedRequest($this->serializer, $this->getUser(), [ 'Me' ]);
     }
 
     /**
@@ -56,17 +35,15 @@ class FriendController extends Controller
         /** @var User $friendToAdd */
         $friendToAdd = $emi->getRepository(User::class)->findOneBy(["username" => $friend]);
 
-        if (null !== $friendToAdd && $user->getId() !== $friendToAdd->getId() && !$user->getFriends()->contains($friendToAdd)) {
-            $user->addFriend($friendToAdd);
+        if (null !== $friendToAdd && $user->getId() !== $friendToAdd->getId()) {
+            $friendship = $user->addFriend($friendToAdd);
 
             $emi->persist($user);
             $emi->flush();
 
-            return new JsonResponse(["code" => 201, "message" => "Friend request sent to $friend !"]);
+            return new SerializedRequest($this->serializer, $friendship, ["AddFriend"]);
         } else if ($friendToAdd->getId() === $user->getId()) {
             return new JsonResponse(["code" => "409", "message" => "You are trying to add yourself as friend"]);
-        } else if ($user->getFriends()->contains($friendToAdd)) {
-            return new JsonResponse(["code" => "409", "message" => "This user is already in your friendlist !"]);
         }
 
         return new ErrorResponse(404, "The friend cannot be found");

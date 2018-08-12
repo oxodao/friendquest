@@ -2,6 +2,8 @@
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * Represents a game
@@ -16,26 +18,31 @@ class Game {
      * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="NONE")
+     * @Groups({"Game"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="initializedGames")
+     * @Groups({"PlayerUUID"})
      */
     private $firstPlayer;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="joinedGames")
+     * @Groups({"PlayerUUID"})
      */
     private $secondPlayer;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"Game"})
      */
     private $isFirstPlayerTurn;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="game")
+     * @Groups({"Game"})
      */
     private $answers;
 
@@ -86,17 +93,17 @@ class Game {
 
     public function getAnswers(): array
     {
-        return $this->answers;
+        return $this->answers->toArray();
     }
 
     public function getLastAnswers(): array
     {
         $cnt = count($this->answers);
         if ($cnt > 6) {
-            return array_splice($this->answers, $cnt - 6, 6);
+            return array_splice($this->answers->toArray(), $cnt - 6, 6);
         }
 
-        return $this->answers;
+        return $this->answers->toArray();
     }
 
 }

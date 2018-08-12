@@ -5,15 +5,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Game;
-use App\Entity\User;
 use App\Response\ErrorResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Serialization\SerializedRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class GameController extends Controller
+class GameController extends SerializerAwareController
 {
 
     /**
@@ -21,16 +18,8 @@ class GameController extends Controller
      */
     public function getGameList(): Response
     {
-        /** @var User $user */
         $user = $this->getUser();
-
-        $games = [];
-        /** @var Game $game */
-        foreach($user->getGames() as $game) {
-            $games[] = $game->getFirstPlayer()->getUsername() . "(*) vs " . $game->getSecondPlayer()->getUsername();
-        }
-
-        return new JsonResponse($games);
+        return new SerializedRequest($this->serializer, $user->getGames(), [ 'Game', 'PlayerUUID' ]);
     }
 
     /**
@@ -42,10 +31,7 @@ class GameController extends Controller
         $game = $user->getGame($id);
 
         if ($game !== null) {
-            return new JsonResponse([
-                "id" => $game->getId(),
-                "isFirstPlayerTurn" => $game->isFirstPlayerTurn(),
-            ]);
+            return new SerializedRequest($this->serializer, $game, ['Game', 'PlayerUUID']);
         }
 
         return new ErrorResponse(404, "You don't have a game with this ID");
