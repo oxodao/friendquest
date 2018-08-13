@@ -10,11 +10,13 @@ import ListItemText            from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListSubheader           from '@material-ui/core/ListSubheader';
 import IconButton              from '@material-ui/core/IconButton';
+import Button                  from '@material-ui/core/Button';
 import Avatar                  from '@material-ui/core/Avatar';
 
 import DeleteIcon                            from '@material-ui/icons/Close';
 import AcceptIcon                            from '@material-ui/icons/Done';
 import PlayIcon                              from '@material-ui/icons/PlayArrow';
+import SearchIcon                            from '@material-ui/icons/Search';
 
 import '../assets/css/friendlist.scss';
 import {addFriendAction, removeFriendAction} from "../actions/token_actions";
@@ -44,7 +46,7 @@ class FriendList extends Component {
                     <Avatar alt={friend.username} src={friend.image}/>
                     <ListItemText primary={friend.username}/>
                     <ListItemSecondaryAction>
-                        <IconButton onClick={() => this.props.removeUser({ user: friend.id})}>
+                        <IconButton onClick={() => this.props.removeUser({user: friend.id})}>
                             <DeleteIcon/>
                         </IconButton>
                         <IconButton onClick={() => this.props.addFriend({user: friend.username})}>
@@ -71,7 +73,7 @@ class FriendList extends Component {
                     <Avatar alt={friend.username} src={friend.image}/>
                     <ListItemText primary={friend.username}/>
                     <ListItemSecondaryAction>
-                        <IconButton onClick={() => this.props.removeUser({ user: friend.id})}>
+                        <IconButton onClick={() => this.props.removeUser({user: friend.id})}>
                             <DeleteIcon/>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -82,7 +84,7 @@ class FriendList extends Component {
         return <div className="container">
             <BackgroundUserImage user={this.props.user}/>
             <div className="content">
-                <List className="darken" subheader={<li/>}>
+                <List id="FriendList" className="darken" subheader={<li/>}>
                     {this.generateSubHeader("Demandes d'amis", 'requests', 'dark-blue')}
                     {requests}
 
@@ -93,6 +95,9 @@ class FriendList extends Component {
                     {pendings}
 
                 </List>
+                <Button id="FriendList-Search" variant="contained">
+                    <SearchIcon/>
+                </Button>
             </div>
             <NavBar/>
         </div>;

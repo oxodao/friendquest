@@ -52,22 +52,24 @@ body {
 }
 
 #Router {
-  flex           : 1 0;
+  flex           : 1 0 auto;
   display        : flex;
   flex-direction : column;
 
   .container {
-    flex           : 1 0;
+    flex           : 1 0 auto;
     display        : flex;
     flex-direction : column;
 
     .content {
-      flex : 1 0;
-      padding-top: 10px;
+      flex           : 1 0;
+      display        : flex;
+      flex-direction : column;
+      padding-top    : 10px;
     }
   }
 }
 
 .darken {
-  background: rgba(0, 0, 0, .4);
+  background : rgba(0, 0, 0, .4);
 }
