@@ -2,7 +2,6 @@ import React, {Component}      from 'react';
 import {connect}               from "react-redux";
 import NavBar                  from './Navbar';
 
-import '../assets/css/friendlist.scss';
 import BackgroundUserImage     from "./BackgroundUserImage";
 import List                    from '@material-ui/core/List';
 import ListItem                from '@material-ui/core/ListItem';
@@ -16,13 +15,15 @@ import DeleteIcon from '@material-ui/icons/Close';
 import AcceptIcon from '@material-ui/icons/Done';
 import PlayIcon from '@material-ui/icons/PlayArrow';
 
+import '../assets/css/friendlist.scss';
+
 class FriendList extends Component {
 
-    generateSubHeader(title, condition) {
+    generateSubHeader(title, condition, className = "") {
         let user = this.props.user;
         if (null !== user) {
             if (undefined !== user[condition] && null !== user[condition] && user[condition].length > 0) {
-                return <ListSubheader>{title}</ListSubheader>;
+                return <ListSubheader className={className}>{title}</ListSubheader>;
             }
         }
     }
@@ -37,7 +38,7 @@ class FriendList extends Component {
 
             // Theses are only defined when the /me requests got back
             if (undefined !== this.props.user.requests) {
-                requests = this.props.user.requests.map(friend => <ListItem key={friend.id}>
+                requests = this.props.user.requests.map(friend => <ListItem className="darker-blue" key={friend.id}>
                     <Avatar alt={friend.username} src={friend.image}/>
                     <ListItemText primary={friend.username}/>
                     <ListItemSecondaryAction>
@@ -80,7 +81,7 @@ class FriendList extends Component {
             <BackgroundUserImage user={this.props.user}/>
             <div className="content">
                 <List className="darken" subheader={<li/>}>
-                    {this.generateSubHeader("Demandes d'amis", 'requests')}
+                    {this.generateSubHeader("Demandes d'amis", 'requests', 'dark-blue')}
                     {requests}
 
                     <ListSubheader>Mes amis</ListSubheader>

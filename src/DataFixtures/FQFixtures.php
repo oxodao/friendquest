@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DataFixtures;
 
 
@@ -44,9 +45,9 @@ class FQFixtures extends Fixture
             $user->setUsername("user-" . $i);
             $user->setPassword($this->encoder->encodePassword($user, "user-" . $i));
             $user->setEmail("user-$i@friendsquest.dev");
-            $user->setRoles([ 'ROLE_USER' ]);
+            $user->setRoles(['ROLE_USER']);
 
-            $rand = rand(0, count($this->images)-1);
+            $rand = rand(0, count($this->images) - 1);
             $user->setImage($this->images[$rand]);
 
             $users[] = $user;
@@ -54,10 +55,18 @@ class FQFixtures extends Fixture
             $om->persist($user);
         }
 
-        $users[3]->addFriend($users[4]);
+        $om->flush();
 
-        for ($i = 2; $i < 4; $i++){
-            $om->persist($users[$i]);
+        // Friend them
+        $friendships = [
+            (new Friendship($users[3], $users[4]))->setState(Friendship::$STATE_PENDING),
+            (new Friendship($users[2], $users[3]))->setState(Friendship::$STATE_PENDING),
+            (new Friendship($users[5], $users[3]))->setState(Friendship::$STATE_ACCEPTED)
+        ];
+
+
+        for ($i = 0; $i < count($friendships); $i++) {
+            $om->persist($friendships[$i]);
         }
 
 
@@ -99,11 +108,11 @@ class FQFixtures extends Fixture
                 ]
             ]
         ];
-        foreach($questions as $question) {
+        foreach ($questions as $question) {
             $currQuest = new Question();
             $currQuest->setQuestion($question[0]);
             $currQuest->setAdult($question[1]);
-            foreach($question[2] as $ans) {
+            foreach ($question[2] as $ans) {
                 $currQuest->addAnswer($ans);
             }
 
