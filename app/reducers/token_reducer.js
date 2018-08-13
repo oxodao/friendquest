@@ -5,7 +5,7 @@ import {
     UPDATE_TYPED_CRED,
     LOGIN,
     SET_TOKEN,
-    GOT_USER_INFO,
+    GOT_USER_INFO, REMOVE_FRIEND, REMOVED_FRIEND, ADDED_FRIEND,
 }                           from "../actions/token_actions";
 import jwt_decode           from "jwt-decode";
 import User                 from '../model/User';
@@ -39,6 +39,12 @@ export default function (state = initialState, action) {
             let currUser = new User();
             currUser.updateInfo(action.payload.info);
             return {...state, user: currUser};
+
+        case ADDED_FRIEND:
+            return {...state, user: state.user.addFriend(action.payload)};
+
+        case REMOVED_FRIEND:
+            return {...state, user: state.user.removeFriend(action.payload.user)};
 
         default:
             return state;

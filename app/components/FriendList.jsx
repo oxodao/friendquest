@@ -1,8 +1,9 @@
-import React, {Component}      from 'react';
-import {connect}               from "react-redux";
-import NavBar                  from './Navbar';
+import React, {Component} from 'react';
+import {connect}          from "react-redux";
+import NavBar             from './Navbar';
 
 import BackgroundUserImage     from "./BackgroundUserImage";
+import {bindActionCreators}    from 'redux';
 import List                    from '@material-ui/core/List';
 import ListItem                from '@material-ui/core/ListItem';
 import ListItemText            from '@material-ui/core/ListItemText';
@@ -11,11 +12,12 @@ import ListSubheader           from '@material-ui/core/ListSubheader';
 import IconButton              from '@material-ui/core/IconButton';
 import Avatar                  from '@material-ui/core/Avatar';
 
-import DeleteIcon from '@material-ui/icons/Close';
-import AcceptIcon from '@material-ui/icons/Done';
-import PlayIcon from '@material-ui/icons/PlayArrow';
+import DeleteIcon                            from '@material-ui/icons/Close';
+import AcceptIcon                            from '@material-ui/icons/Done';
+import PlayIcon                              from '@material-ui/icons/PlayArrow';
 
 import '../assets/css/friendlist.scss';
+import {addFriendAction, removeFriendAction} from "../actions/token_actions";
 
 class FriendList extends Component {
 
@@ -42,10 +44,10 @@ class FriendList extends Component {
                     <Avatar alt={friend.username} src={friend.image}/>
                     <ListItemText primary={friend.username}/>
                     <ListItemSecondaryAction>
-                        <IconButton>
+                        <IconButton onClick={() => this.props.removeUser({ user: friend.id})}>
                             <DeleteIcon/>
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={() => this.props.addFriend({user: friend.username})}>
                             <AcceptIcon/>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -69,7 +71,7 @@ class FriendList extends Component {
                     <Avatar alt={friend.username} src={friend.image}/>
                     <ListItemText primary={friend.username}/>
                     <ListItemSecondaryAction>
-                        <IconButton>
+                        <IconButton onClick={() => this.props.removeUser({ user: friend.id})}>
                             <DeleteIcon/>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -103,5 +105,8 @@ export default connect(
     state => ({
         user: state.tokenReducer.user,
     }),
-    dispatch => ({}),
+    dispatch => ({
+        addFriend: bindActionCreators(addFriendAction, dispatch),
+        removeUser: bindActionCreators(removeFriendAction, dispatch),
+    }),
 )(FriendList);

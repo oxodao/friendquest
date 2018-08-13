@@ -5,6 +5,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Friendship;
 use App\Entity\User;
 use App\Response\ErrorResponse;
 use App\Serialization\SerializedRequest;
@@ -21,7 +22,7 @@ class FriendController extends SerializerAwareController
      */
     public function me(): Response
     {
-        return new SerializedRequest($this->serializer, $this->getUser(), [ 'Me', 'Friend.js' ], true);
+        return new SerializedRequest($this->serializer, $this->getUser(), ['Me', 'Friend.js'], true);
     }
 
     /**
@@ -32,21 +33,24 @@ class FriendController extends SerializerAwareController
         /** @var User $user */
         $user = $this->getUser();
 
+        if ($friend === $user->getUsername()) {
+            return new ErrorResponse(406, "You can't add yourself as friend");
+        }
+
         /** @var User $friendToAdd */
         $friendToAdd = $emi->getRepository(User::class)->findOneBy(["username" => $friend]);
 
-        if (null !== $friendToAdd && $user->getId() !== $friendToAdd->getId()) {
-            $friendship = $user->addFriend($friendToAdd);
-
-            $emi->persist($user);
-            $emi->flush();
-
-            return new SerializedRequest($this->serializer, $friendship, ["AddFriend"]);
-        } else if ($friendToAdd->getId() === $user->getId()) {
-            return new JsonResponse(["code" => "409", "message" => "You are trying to add yourself as friend"]);
+        if (null === $friendToAdd) {
+            return new ErrorResponse(404, "This user does not exists");
         }
 
-        return new ErrorResponse(404, "The friend cannot be found");
+        $friendship = $user->addFriend($friendToAdd);
+
+        $emi->persist($user);
+        $emi->flush();
+
+        // I get the state since adding a friends works both for requesting someone, or accepting someone
+        return new SerializedRequest($this->serializer, ['friend' => $friendToAdd, 'state' => $friendship->getState()], ['AddFriend']);
     }
 
     /**
@@ -57,25 +61,48 @@ class FriendController extends SerializerAwareController
         /** @var User $user */
         $user = $this->getUser();
 
-        /** @var User $friendToDelete */
-        $friendToDelete = $emi->getRepository(User::class)->findOneBy(["username" => $friend]);
-
-        if (null !== $friendToDelete) {
-            $removed = $user->removeFriend($friendToDelete);
-            $emi->persist($user);
-
-            $friendToDelete->removeFriend($user);
-            $emi->persist($friendToDelete);
-            $emi->flush();
-
-            if (!$removed) {
-                return new JsonResponse(["code" => 404, "message" => "User $friend was not in the friendlist !"]);
-            }
-
-            return new JsonResponse(["code" => 410, "message" => "Friend.js $friend removed!"]);
+        if ($friend === $user->getId()) {
+            return new ErrorResponse(406, "You can't remove yourself");
         }
 
-        return new ErrorResponse(404, "The friend cannot be found");
+        /** @var Friendship $pending */
+        $friendshipId = null;
+        foreach ($user->getFriendsPending() as $pending) {
+            if ($friendshipId !== null) break;
+
+            if ($pending->getReceiver()->getId() === $friend) {
+                $friendshipId = $pending->getId();
+            }
+        }
+
+        /** @var Friendship $friend */
+        foreach ($user->getFriends() as $currFriend) {
+            if ($friendshipId !== null) break;
+
+            if ($currFriend->getReceiver()->getId() === $friend || $currFriend->getEmitter()->getId() === $friend) {
+                $friendshipId = $currFriend->getId();
+            }
+        }
+
+        /** @var Friendship $request */
+        foreach ($user->getFriendRequests() as $request) {
+            if ($friendshipId !== null) break;
+
+            if ($request->getEmitter()->getId() === $friend) {
+                $friendshipId = $request->getId();
+            }
+        }
+
+        if ($friendshipId === null) {
+            return new ErrorResponse(404, "You are not friends");
+        }
+
+        $fs = $emi->getRepository(Friendship::class)->findOneBy(["id" => $friendshipId]);
+        $emi->remove($fs);
+        $emi->flush();
+
+        return new SerializedRequest($this->serializer, ['id' => $friend], []);
+
     }
 
 }

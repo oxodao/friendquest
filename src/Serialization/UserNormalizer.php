@@ -63,29 +63,28 @@ class UserNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     public function normalize($object, $format = null, array $context = array())
     {
-        $friends = [];
-        foreach ($object->getFriends() as $friend) {
-            $friends[] = $this->mapFriend($object, $friend);
+        $user = ["id" => $object->getId(), "username" => $object->getUsername(), "image" => $object->getImage()];
+
+        $hasGroups = array_key_exists('groups', $context);
+
+        if (!$hasGroups || ($hasGroups && !in_array('AddFriend', $context['groups']))) {
+            $user['friends'] = [];
+            foreach ($object->getFriends() as $friend) {
+                $user['friends'][] = $this->mapFriend($object, $friend);
+            }
+
+            $user['pendings'] = [];
+            foreach ($object->getFriendsPending() as $pending) {
+                $user['pendings'][] = $this->normalizeFriend($pending->getReceiver(), $pending->getState());
+            }
+
+            $user['requests'] = [];
+            foreach ($object->getFriendRequests() as $request) {
+                $user['requests'][] = $this->normalizeFriend($request->getEmitter(), $request->getState());
+            }
         }
 
-        $pendings = [];
-        foreach ($object->getFriendsPending() as $pending) {
-            $pendings[] = $this->normalizeFriend($pending->getReceiver(), $pending->getState());
-        }
-
-        $requests = [];
-        foreach ($object->getFriendRequests() as $request) {
-            $requests[] = $this->normalizeFriend($request->getEmitter(), $request->getState());
-        }
-
-        return [
-            "id" => $object->getId(),
-            "username" => $object->getUsername(),
-            "image" => $object->getImage(),
-            "friends" => $friends,
-            "pendings" => $pendings,
-            "requests" => $requests,
-        ];
+        return $user;
     }
 
     /**
