@@ -33,7 +33,7 @@ export default function (state = initialState, action) {
             return {...state, token: action.payload.token, refreshToken: action.payload.refreshToken, user};
 
         case DELETE_TOKEN:
-            return {...state, user: null};
+            return {...state, token: null, refreshToken: null, user: null};
 
         case GOT_USER_INFO:
             let currUser = new User();

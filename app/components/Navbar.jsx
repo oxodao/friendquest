@@ -10,9 +10,9 @@ import {Link}                 from 'react-router-dom';
 class Navbar extends Component {
 
     render() {
-        return <BottomNavigation showLabels>
-            <Link to="/"><BottomNavigationAction label="Jouer" icon={<GameIcon/>}/></Link>
-            <Link to="/settings"><BottomNavigationAction label="Configuration" icon={<SettingsIcon/>}/></Link>
+        return <BottomNavigation>
+            <Link to="/"><BottomNavigationAction icon={<GameIcon/>}/></Link>
+            <Link to="/settings"><BottomNavigationAction icon={<SettingsIcon/>}/></Link>
         </BottomNavigation>;
     }
 
