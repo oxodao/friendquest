@@ -41,6 +41,11 @@ class User implements UserInterface, \Serializable
      */
     private $email;
 
+    /**
+     * @ORM\Column(type="string", length=1024)
+     * @Groups({"Me", "Friend"})
+     */
+    private $image;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Game", mappedBy="firstPlayer")
@@ -187,6 +192,17 @@ class User implements UserInterface, \Serializable
         $friendship = (new Friendship($this, $user))->setState(Friendship::$STATE_PENDING);
         $this->friends->add($friendship);
         return $friendship;
+    }
+
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): User
+    {
+       $this->image = $image;
+       return $this;
     }
 
     /**

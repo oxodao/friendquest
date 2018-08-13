@@ -13,15 +13,14 @@ body {
 .App {
   @extend %set-width;
 
-  margin     : auto;
-  height     : 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-
+  margin         : auto;
+  height         : 100vh;
+  display        : flex;
+  flex-direction : column;
+  overflow       : hidden;
 
   #Main_Header {
-    flex: 0 0 5em;
+    flex           : 0 0 5em;
     background     : linear-gradient(to right, rgba(#ee32ff, .7) 0%, rgba(#898bff, .7) 100%);
     border-radius  : 0 0 10px 10px;
     box-shadow     : 0 0px 10px #111111;
@@ -42,6 +41,7 @@ body {
       border        : 1px solid black;
       border-radius : 45%;
       box-shadow    : 0 0 2px #111111;
+      overflow      : hidden;
     }
 
     h2 {
@@ -51,7 +51,18 @@ body {
   }
 }
 
-
 #Router {
-  flex: 1 0;
+  flex           : 1 0;
+  display        : flex;
+  flex-direction : column;
+
+  .container {
+    flex           : 1 0;
+    display        : flex;
+    flex-direction : column;
+
+    .content {
+      flex : 1 0;
+    }
+  }
 }

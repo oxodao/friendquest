@@ -1,10 +1,20 @@
 export default class User {
 
     constructor(json) {
-        this.exp = json['exp'];
+        if (json) {
+            this.exp      = json['exp'];
+            this.username = json['username'];
+            this.roles    = json['roles'];
+            this.image    = null;
+        }
+    }
+
+    updateInfo(json) {
+        console.log(json);
+        this.id       = json['id'];
         this.username = json['username'];
-        this.roles = json['roles'];
-        this.image = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Tot%C3%B2%2C_Neapolitan_actor_1943.jpg/220px-Tot%C3%B2%2C_Neapolitan_actor_1943.jpg";// json[''];
+        this.email    = json['email'];
+        this.image    = json['image'];
     }
 
 }

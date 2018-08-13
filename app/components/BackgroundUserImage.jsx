@@ -8,7 +8,8 @@ class BackgroundUserImage extends Component {
 
     render() {
         let loaded = undefined !== this.props.user && null !== this.props.user;
-        let userImage = loaded ? this.props.user.image : DefaultImage;
+        let imageNotNull = loaded && this.props.user.image !== null;
+        let userImage = imageNotNull ? this.props.user.image : DefaultImage;
 
         return <div className="BackgroundUserImageContainer">
             <div className="BackgroundUserImage" style={{backgroundImage: 'url(' + userImage + ')'}}/>

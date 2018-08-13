@@ -7,13 +7,13 @@ import {createMuiTheme}              from '@material-ui/core/styles';
 import {connect}                     from "react-redux";
 import SnackbarCustom                from "./components/SnackbarCustom";
 import FriendList                    from "./components/FriendList";
-import NavBar                        from './components/Navbar';
-
-import UserImage from "./assets/images/default.svg";
+import UserImage                     from "./assets/images/default.svg";
+import Settings                      from "./components/Settings";
+import {fetchUserInfoAction}         from "./actions/token_actions";
+import {bindActionCreators}          from "redux";
 
 import './assets/css/App.scss';
 import './assets/images/background.jpg';
-import Settings  from "./components/Settings";
 
 class App extends Component {
 
@@ -25,8 +25,9 @@ class App extends Component {
             },
         });
 
-        let logged   = this.props.user !== null;
-        let picture  = logged ? this.props.user.image : UserImage;
+        let logged   = this.props.user !== null && this.props.user !== undefined;
+        let imageNotNull = logged && this.props.user.image !== null;
+        let picture  = imageNotNull ? this.props.user.image : UserImage;
         let username = logged ? this.props.user.username : 'Not logged';
 
         let header = <div id="Main_Header">
@@ -45,7 +46,6 @@ class App extends Component {
                             <Route path="/settings" component={Settings}/>
                         </div>
                     </Router>
-                    <NavBar/>
 
                     <Login/>
                     <SnackbarCustom/>
@@ -59,5 +59,7 @@ export default connect(
     state => ({
         user: state.tokenReducer.user,
     }),
-    dispatch => ({}),
+    dispatch => ({
+        fetchUserInfo: bindActionCreators(fetchUserInfoAction, dispatch),
+    }),
 )(App);
