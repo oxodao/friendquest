@@ -21,7 +21,7 @@ class FriendController extends SerializerAwareController
      */
     public function me(): Response
     {
-        return new SerializedRequest($this->serializer, $this->getUser(), [ 'Me' ]);
+        return new SerializedRequest($this->serializer, $this->getUser(), [ 'Me', 'Friend.js' ], true);
     }
 
     /**
@@ -72,7 +72,7 @@ class FriendController extends SerializerAwareController
                 return new JsonResponse(["code" => 404, "message" => "User $friend was not in the friendlist !"]);
             }
 
-            return new JsonResponse(["code" => 410, "message" => "Friend $friend removed!"]);
+            return new JsonResponse(["code" => 410, "message" => "Friend.js $friend removed!"]);
         }
 
         return new ErrorResponse(404, "The friend cannot be found");

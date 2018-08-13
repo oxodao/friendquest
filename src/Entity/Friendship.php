@@ -4,13 +4,25 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Serializable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Serializer\Exception\BadMethodCallException;
+use Symfony\Component\Serializer\Exception\CircularReferenceException;
+use Symfony\Component\Serializer\Exception\ExtraAttributesException;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\RuntimeException;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Friendship between two user
  * @author Nathan JANCZEWSKI <nathan@janczewski.fr>
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="FriendshipRepository")
  * @ORM\Table(name="friendship")
  */
 class Friendship
@@ -22,25 +34,21 @@ class Friendship
      * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="NONE")
-     * @Groups({"Me"})
      */
     protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="friends")
-     * @Groups({"AddFriend"})
      */
     private $emitter;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="friendsWithMe")
-     * @Groups({"AddFriend"})
      */
     private $receiver;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"Me", "AddFriend"})
      */
     private $state;
 
@@ -73,5 +81,4 @@ class Friendship
         $this->state = $state;
         return $this;
     }
-
 }

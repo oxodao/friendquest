@@ -6,6 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Exception\BadMethodCallException;
+use Symfony\Component\Serializer\Exception\CircularReferenceException;
+use Symfony\Component\Serializer\Exception\ExtraAttributesException;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\RuntimeException;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * Standard user class
@@ -20,13 +29,13 @@ class User implements UserInterface, \Serializable
      * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="NONE")
-     * @Groups({"PlayerUUID", "Me", "Friend", "AddFriend" })
+     * @Groups({"PlayerUUID", "Me", "Friend.js", "AddFriend" })
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
-     * @Groups({"Me", "Friend", "AddFriend" })
+     * @Groups({"Me", "Friend.js", "AddFriend" })
      */
     private $username;
 
@@ -43,7 +52,7 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=1024)
-     * @Groups({"Me", "Friend"})
+     * @Groups({"Me", "Friend.js"})
      */
     private $image;
 
@@ -132,25 +141,20 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getFriends(): array
-    {
-        return $this->friends->toArray();
-    }
-
-    public function getFriendsWithMe(): array
-    {
-        return $this->friendsWithMe->toArray();
-    }
-
-    // No clue if it will be usefull
-    public function getFriendRequest()
+    public function getFriendRequests()
     {
         return $this->friendsWithMe->filter(function (Friendship $frd) {
             return $frd->getState() === Friendship::$STATE_PENDING;
         })->toArray();
     }
 
-    public function getFriendsAccepted()
+    public function getFriendsPending() {
+        return $this->friends->filter(function (Friendship $frd) {
+            return $frd->getState() === Friendship::$STATE_PENDING;
+        })->toArray();
+    }
+
+    public function getFriends()
     {
         $filterFunc = function (Friendship $frd) {
             return $frd->getState() === Friendship::$STATE_ACCEPTED;
