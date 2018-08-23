@@ -1,32 +1,21 @@
-import React, {Component} from 'react';
-import {connect}          from "react-redux";
-import NavBar             from './Navbar';
-
-import BackgroundUserImage     from "./BackgroundUserImage";
-import {bindActionCreators}    from 'redux';
-import List                    from '@material-ui/core/List';
-import ListItem                from '@material-ui/core/ListItem';
-import ListItemText            from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListSubheader           from '@material-ui/core/ListSubheader';
-import IconButton              from '@material-ui/core/IconButton';
-import Button                  from '@material-ui/core/Button';
-import Avatar                  from '@material-ui/core/Avatar';
-
-import DeleteIcon                            from '@material-ui/icons/Close';
-import AcceptIcon                            from '@material-ui/icons/Done';
-import PlayIcon                              from '@material-ui/icons/PlayArrow';
-import SearchIcon                            from '@material-ui/icons/Search';
+import { addFriendAction, removeFriendAction } from "../actions/token_actions";
+import { bindActionCreators } from 'redux';
+import React, { Component } from 'react';
+import BackgroundUserImage from "./BackgroundUserImage";
+import ListSubheader from '@material-ui/core/ListSubheader';
+import { connect } from "react-redux";
+import NavBar from './Navbar';
+import List from '@material-ui/core/List';
 
 import '../assets/css/friendlist.scss';
-import {addFriendAction, removeFriendAction} from "../actions/token_actions";
+import FriendListItem, { STATE_FRIENDS, STATE_PENDING, STATE_REQUEST } from "./FriendListItem";
 
 class FriendList extends Component {
 
     generateSubHeader(title, condition, className = "") {
         let user = this.props.user;
         if (null !== user) {
-            if (undefined !== user[condition] && null !== user[condition] && user[condition].length > 0) {
+            if (undefined !== user[ condition ] && null !== user[ condition ] && user[ condition ].length > 0) {
                 return <ListSubheader className={className}>{title}</ListSubheader>;
             }
         }
@@ -42,42 +31,17 @@ class FriendList extends Component {
 
             // Theses are only defined when the /me requests got back
             if (undefined !== this.props.user.requests) {
-                requests = this.props.user.requests.map(friend => <ListItem className="darker-blue" key={friend.id}>
-                    <Avatar alt={friend.username} src={friend.image}/>
-                    <ListItemText primary={friend.username}/>
-                    <ListItemSecondaryAction>
-                        <IconButton onClick={() => this.props.removeUser({user: friend.id})}>
-                            <DeleteIcon/>
-                        </IconButton>
-                        <IconButton onClick={() => this.props.addFriend({user: friend.username})}>
-                            <AcceptIcon/>
-                        </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>);
+                requests = this.props.user.requests.map(friend => <FriendListItem key={friend.id} friend={friend} state={STATE_REQUEST}
+                                                                          addFriend={() => this.props.addFriend({ user: friend.username })}
+                                                                          removeFriend={() => this.props.removeFriend({ user: friend.id })}/>);
             }
 
             if (undefined !== this.props.user.friends) {
-                friends = this.props.user.friends.map(friend => <ListItem button key={friend.id}>
-                    <Avatar alt={friend.username} src={friend.image}/>
-                    <ListItemText primary={friend.username}/>
-                    <ListItemSecondaryAction>
-                        <IconButton>
-                            <PlayIcon/>
-                        </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>);
+                friends = this.props.user.friends.map(friend => <FriendListItem key={friend.id} friend={friend} state={STATE_FRIENDS}/>);
             }
 
             if (undefined !== this.props.user.pendings) {
-                pendings = this.props.user.pendings.map(friend => <ListItem key={friend.id}>
-                    <Avatar alt={friend.username} src={friend.image}/>
-                    <ListItemText primary={friend.username}/>
-                    <ListItemSecondaryAction>
-                        <IconButton onClick={() => this.props.removeUser({user: friend.id})}>
-                            <DeleteIcon/>
-                        </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>);
+                pendings = this.props.user.pendings.map(friend => <FriendListItem key={friend.id} friend={friend} state={STATE_PENDING} removeFriend={() => this.props.removeFriend({ user: friend.id })}/>);
             }
         }
 
@@ -95,9 +59,6 @@ class FriendList extends Component {
                     {pendings}
 
                 </List>
-                <Button id="FriendList-Search" variant="contained">
-                    <SearchIcon/>
-                </Button>
             </div>
             <NavBar/>
         </div>;
@@ -111,7 +72,7 @@ export default connect(
         user: state.tokenReducer.user,
     }),
     dispatch => ({
-        addFriend: bindActionCreators(addFriendAction, dispatch),
-        removeUser: bindActionCreators(removeFriendAction, dispatch),
+        addFriend : bindActionCreators(addFriendAction, dispatch),
+        removeFriend: bindActionCreators(removeFriendAction, dispatch),
     }),
 )(FriendList);
