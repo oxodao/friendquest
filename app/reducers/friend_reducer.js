@@ -4,7 +4,7 @@ import {
 } from "../actions/friends_actions";
 
 const initialState = {
-    typed: '',
+    typed  : '',
     results: [],
 };
 

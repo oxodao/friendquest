@@ -6,6 +6,7 @@ import {connect}                                            from "react-redux";
 import {getTokenAction, loginAction, updateTypedCredAction} from "../actions/token_actions";
 import {bindActionCreators}                                 from "redux";
 import {NO_TOKEN_AVAILABLE}                                 from "../middleware/LocalStorageMiddleware";
+import { getConfigAction }                                  from "../actions/config_actions";
 
 class Login extends Component {
 
@@ -32,6 +33,7 @@ class Login extends Component {
     componentDidMount() {
         if (null === this.props.user) {
             this.props.getToken();
+            this.props.getConfig();
         }
     }
 
@@ -82,5 +84,6 @@ export default connect(
         updateTyped: bindActionCreators(updateTypedCredAction, dispatch),
         login: bindActionCreators(loginAction, dispatch),
         getToken: bindActionCreators(getTokenAction, dispatch),
+        getConfig: bindActionCreators(getConfigAction, dispatch),
     }),
 )(Login);
