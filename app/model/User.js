@@ -22,7 +22,6 @@ export default class User {
 
     // Everything under should not be inside the model, ikr..
     updateInfo(json) {
-        console.log(json);
         this.id       = json['id'];
         this.username = json['username'];
         this.email    = json['email'];

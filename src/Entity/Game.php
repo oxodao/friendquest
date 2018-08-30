@@ -18,7 +18,7 @@ class Game {
      * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="NONE")
-     * @Groups({"Game"})
+     * @Groups({"Game", "Games"})
      */
     private $id;
 
@@ -36,12 +36,12 @@ class Game {
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"Game"})
+     * @Groups({"Game", "Games"})
      */
     private $isFirstPlayerTurn;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="game")
+     * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="game", cascade={"persist", "remove"})
      * @Groups({"Game"})
      */
     private $answers;
@@ -94,6 +94,11 @@ class Game {
     public function getAnswers(): array
     {
         return $this->answers->toArray();
+    }
+
+    public function addAnswer(Answer $answer): Game{
+        $this->answers[] = $answer;
+        return $this;
     }
 
     public function getLastAnswers(): array

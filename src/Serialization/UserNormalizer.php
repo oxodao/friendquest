@@ -63,9 +63,12 @@ class UserNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     public function normalize($object, $format = null, array $context = array())
     {
-        $user = ["id" => $object->getId(), "username" => $object->getUsername(), "image" => $object->getImage()];
-
         $hasGroups = array_key_exists('groups', $context);
+
+        if ($hasGroups && in_array('PlayerUUID', $context['groups']))
+            return $object->getId();
+
+        $user = ["id" => $object->getId(), "username" => $object->getUsername(), "image" => $object->getImage()];
 
         if (!$hasGroups || ($hasGroups && !in_array('AddFriend', $context['groups']))) {
             $user['friends'] = [];

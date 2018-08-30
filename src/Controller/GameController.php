@@ -15,15 +15,17 @@ class GameController extends SerializerAwareController
 
     /**
      * @Route("/api/games", methods={"GET"})
+     * Returns only game infos
      */
     public function getGameList(): Response
     {
         $user = $this->getUser();
-        return new SerializedRequest($this->serializer, $user->getGames(), [ 'Game', 'PlayerUUID' ]);
+        return new SerializedRequest($this->serializer, $user->getGames(), [ 'Games', 'PlayerUUID' ]);
     }
 
     /**
      * @Route("/api/games/{id}", methods={"GET"})
+     * Return a full-blown game
      */
     public function getOneGame(string $id): Response
     {

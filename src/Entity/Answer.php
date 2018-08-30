@@ -83,7 +83,7 @@ class Answer
         return $this;
     }
 
-    public function getCorrectAnswer(): int
+    public function getCorrectAnswer(): ?int
     {
         return $this->correctAnswer;
     }
@@ -94,7 +94,7 @@ class Answer
         return $this;
     }
 
-    public function getPlayerAnswer(): int
+    public function getPlayerAnswer(): ?int
     {
         return $this->playerAnswer;
     }

@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 
+use App\Entity\Answer;
 use App\Entity\Friendship;
 use App\Entity\Game;
 use App\Entity\Question;
@@ -70,13 +71,13 @@ class FQFixtures extends Fixture
         }
 
 
-        $game = new Game($users[0]);
-        $game->setSecondPlayer($users[1]);
+        $game = new Game($users[3]);
+        $game->setSecondPlayer($users[5]);
         $om->persist($game);
 
         $game2 = new Game($users[1]);
         $game2->setSecondPlayer($users[2]);
-        $game2->nextTurn(false);
+        $game2->nextTurn();
         $om->persist($game2);
 
         $questions = [
@@ -108,6 +109,9 @@ class FQFixtures extends Fixture
                 ]
             ]
         ];
+
+        $questionList = [];
+
         foreach ($questions as $question) {
             $currQuest = new Question();
             $currQuest->setQuestion($question[0]);
@@ -116,8 +120,21 @@ class FQFixtures extends Fixture
                 $currQuest->addAnswer($ans);
             }
 
+            $questionList[] = $currQuest;
             $om->persist($currQuest);
         }
+
+        for ($i = 0; $i < count($questionList); ++$i)
+        {
+            $answer = new Answer($game, $questionList[$i], $i);
+            $game->addAnswer($answer);
+
+            $answer2 = new Answer($game2, $questionList[$i], $i);
+            $game2->addAnswer($answer2);
+        }
+
+        $om->persist($game);
+        $om->persist($game2);
 
         $om->flush();
     }

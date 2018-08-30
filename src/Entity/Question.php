@@ -85,4 +85,9 @@ class Question
         return $this->answers[$val];
     }
 
+    public function getAnswers(): array
+    {
+        return $this->answers;
+    }
+
 }
