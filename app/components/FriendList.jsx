@@ -47,20 +47,22 @@ class FriendList extends Component {
 
         return <div className="container">
             <BackgroundUserImage user={this.props.user}/>
-            <div className="content">
-                <List id="FriendList" className="darken" subheader={<li/>}>
-                    {this.generateSubHeader("Demandes d'amis", 'requests', 'dark-blue')}
-                    {requests}
+            <div className="innerContainer">
+                <div className="content">
+                    <List id="FriendList" className="darken" subheader={<li/>}>
+                        {this.generateSubHeader("Demandes d'amis", 'requests', 'dark-blue')}
+                        {requests}
 
-                    <ListSubheader>Mes amis</ListSubheader>
-                    {friends}
+                        <ListSubheader>Mes amis</ListSubheader>
+                        {friends}
 
-                    {this.generateSubHeader("En attente...", 'pendings')}
-                    {pendings}
+                        {this.generateSubHeader("En attente...", 'pendings')}
+                        {pendings}
 
-                </List>
+                    </List>
+                </div>
+                <NavBar/>
             </div>
-            <NavBar/>
         </div>;
     }
 

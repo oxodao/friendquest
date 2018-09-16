@@ -4,17 +4,16 @@ import BackgroundUserImage from "./BackgroundUserImage";
 import NavBar from './Navbar';
 
 class Search extends Component {
-
     render() {
         return <div className="container">
-            <BackgroundUserImage user={this.props.user}/>
-            <div className="content">
+            <BackgroundUserImage user={this.props.user} />
+            <div className="innerContainer">
+                <div className="content">
+                </div>
+                <NavBar />
             </div>
-            <NavBar/>
         </div>;
-
     }
-
 }
 
 export default connect(

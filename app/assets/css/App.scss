@@ -15,12 +15,15 @@ body {
 
   margin         : auto;
   height         : 100vh;
-  display        : flex;
-  flex-direction : column;
-  overflow       : hidden;
+  //display        : flex;
+  //flex-direction : column;
+  display: grid;
+  grid-template:
+      "header" 5em
+      "router" auto;
 
   #Main_Header {
-    flex           : 0 0 5em;
+    grid-area: header;
     background     : linear-gradient(to right, rgba(#ee32ff, .7) 0%, rgba(#898bff, .7) 100%);
     border-radius  : 0 0 10px 10px;
     box-shadow     : 0 0px 10px #111111;
@@ -52,24 +55,31 @@ body {
 }
 
 #Router {
-  flex           : 1 0 auto;
-  display        : flex;
-  flex-direction : column;
+  grid-area: router;
+  height: calc(100vh - 5em);
 
   .container {
-    flex           : 1 0 auto;
-    display        : flex;
-    flex-direction : column;
+    height: 100%;
+
+    .innerContainer { 
+      height: 100%;
+      display: grid;
+      grid-template:
+          "a" minmax(auto, 100%)
+          "b" auto;
+     }
 
     .content {
-      flex           : 1 0;
-      display        : flex;
-      flex-direction : column;
       padding-top    : 10px;
+      grid-area: a;
+      overflow-y: scroll;
+    }
+    .NavBar {
+      grid-area: b;
     }
   }
 }
 
 .darken {
-  background : rgba(0, 0, 0, .4);
+  background : rgba(0, 0, 0, .7);
 }

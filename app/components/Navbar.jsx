@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 class Navbar extends Component {
 
     render() {
-        return <BottomNavigation>
+        return <BottomNavigation className="NavBar">
             <Link to="/"><BottomNavigationAction icon={<GameIcon/>}/></Link>
             <Link to="/search"><BottomNavigationAction icon={<SearchIcon/>}/></Link>
             <Link to="/settings"><BottomNavigationAction icon={<SettingsIcon/>}/></Link>
