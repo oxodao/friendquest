@@ -5,6 +5,7 @@ export default class Friend {
         this.username = arr.username;
         this.state    = arr.state;
         this.image    = arr.image;
+        this.game     = null;
     }
 
 }

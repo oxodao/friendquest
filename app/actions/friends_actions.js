@@ -8,5 +8,3 @@ export const updateAddFriendAction = (payload = {typed: ""}) => {
 export const gotResultsAddFriend = (payload = {results: []}) => {
     return {type: GOT_RESULTS_ADD_FRIEND, payload};
 };
-
-

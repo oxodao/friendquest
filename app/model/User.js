@@ -1,9 +1,10 @@
 import Friend from './Friend';
+import Game from './Game';
 
 function mapFriendsToArray(friends) {
     let converted = [];
     for (let i = 0; i < friends.length; i++) {
-        converted.push(new Friend(friends[i]));
+        converted.push(new Friend(friends[ i ]));
     }
 
     return converted;
@@ -13,22 +14,22 @@ export default class User {
 
     constructor(json) {
         if (json) {
-            this.exp      = json['exp'];
-            this.username = json['username'];
-            this.roles    = json['roles'];
+            this.exp      = json[ 'exp' ];
+            this.username = json[ 'username' ];
+            this.roles    = json[ 'roles' ];
             this.image    = null;
         }
     }
 
     // Everything under should not be inside the model, ikr..
     updateInfo(json) {
-        this.id       = json['id'];
-        this.username = json['username'];
-        this.email    = json['email'];
-        this.image    = json['image'];
-        this.friends  = mapFriendsToArray(json['friends']);
-        this.pendings = mapFriendsToArray(json['pendings']);
-        this.requests = mapFriendsToArray(json['requests']);
+        this.id       = json[ 'id' ];
+        this.username = json[ 'username' ];
+        this.email    = json[ 'email' ];
+        this.image    = json[ 'image' ];
+        this.friends  = mapFriendsToArray(json[ 'friends' ]);
+        this.pendings = mapFriendsToArray(json[ 'pendings' ]);
+        this.requests = mapFriendsToArray(json[ 'requests' ]);
     }
 
     clone() {
@@ -36,6 +37,10 @@ export default class User {
         user.id       = this.id;
         user.username = this.username;
         user.image    = this.image;
+
+        user.friends  = this.friends;
+        user.pendings = this.pendings;
+        user.requests = this.requests;
 
         return user;
     }
@@ -71,6 +76,22 @@ export default class User {
         user.requests = this.requests.filter(filter);
         user.pendings = this.pendings.filter(filter);
 
+        return user;
+    }
+
+    updateGames(games) {
+        let user = this.clone();
+        for (let game of games) {
+            let isFirstPlayer = game['firstPlayer'] === this.id;
+            let otherID = isFirstPlayer ? game['secondPlayer'] : game['firstPlayer'];
+
+            for (let friend of this.friends) {
+                if (friend.id === otherID) {
+                    friend.game = new Game(isFirstPlayer, game);
+                    break;
+                }
+            }
+        }
         return user;
     }
 }

@@ -36,12 +36,12 @@ class FriendListItem extends Component {
                     break;
                 case STATE_FRIENDS:
                     let iconButton = '';
-                    if (true) {
-                        iconButton = <IconButton> <PlayIcon/> </IconButton>
-                    } else if (true) {
-                        iconButton = <IconButton> <WaitIcon/> </IconButton>
-                    } else {
+                    if (!this.props.friend.game) {
                         iconButton = <IconButton> <CreaIcon/> </IconButton>
+                    } else if (this.props.friend.game.myTurn) {
+                        iconButton = <IconButton> <PlayIcon/> </IconButton>
+                    } else {
+                        iconButton = <IconButton> <WaitIcon/> </IconButton>
                     }
                     rightside = <ListItemSecondaryAction>
                         <IconButton>

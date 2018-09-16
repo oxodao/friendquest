@@ -1,5 +1,6 @@
 import {updateSnackbarAction} from "../actions/snackbar_actions";
 import {gotUserInfoAction}    from "../actions/token_actions";
+import {fetchGamesAction}    from "../actions/game_actions";
 import {checkToken}           from "./auth";
 import {put, call, select} from "redux-saga/effects";
 
@@ -23,6 +24,7 @@ export function* getUserInfo() {
         if (200 === res.status) {
             let resp = yield call([res, 'json']);
             yield put(gotUserInfoAction({info: resp}));
+            yield put(fetchGamesAction());
         } else {
             yield put(updateSnackbarAction({
                 open: true,

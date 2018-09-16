@@ -9,6 +9,8 @@ import { login }                    from "./auth";
 import { getUserInfo, sendProfile } from "./user";
 import { addFriend, removeFriend }  from "./friend";
 import { SEND_PROFILE }             from "../actions/settings_profile_actions";
+import { FETCH_GAMES } from "../actions/game_actions";
+import { getGames } from "./game";
 
 
 export default function* vsaga() {
@@ -18,6 +20,9 @@ export default function* vsaga() {
     // User
     yield takeEvery(FETCH_USER_INFO, getUserInfo);
     yield takeEvery(SEND_PROFILE, sendProfile);
+
+    // Games
+    yield takeEvery(FETCH_GAMES, getGames);
 
     // Friend
     yield takeEvery(ADD_FRIEND, addFriend);

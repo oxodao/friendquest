@@ -10,6 +10,7 @@ import {
 import jwt_decode           from "jwt-decode";
 import User                 from '../model/User';
 import {NO_TOKEN_AVAILABLE} from '../middleware/LocalStorageMiddleware';
+import { GOT_GAMES } from "../actions/game_actions";
 
 const initialState = {
     username: '',
@@ -45,6 +46,9 @@ export default function (state = initialState, action) {
 
         case REMOVED_FRIEND:
             return {...state, user: state.user.removeFriend(action.payload.user)};
+
+        case GOT_GAMES:
+            return {...state, user: state.user.updateGames(action.payload.results)};
 
         default:
             return state;
