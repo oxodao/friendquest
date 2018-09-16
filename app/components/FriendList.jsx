@@ -1,11 +1,11 @@
 import { addFriendAction, removeFriendAction } from "../actions/token_actions";
-import { bindActionCreators } from 'redux';
-import React, { Component } from 'react';
-import BackgroundUserImage from "./BackgroundUserImage";
-import ListSubheader from '@material-ui/core/ListSubheader';
-import { connect } from "react-redux";
-import NavBar from './Navbar';
-import List from '@material-ui/core/List';
+import { bindActionCreators }                  from 'redux';
+import React, { Component }                    from 'react';
+import BackgroundUserImage                     from "./BackgroundUserImage";
+import ListSubheader                           from '@material-ui/core/ListSubheader';
+import { connect }                             from "react-redux";
+import NavBar                                  from './Navbar';
+import List                                    from '@material-ui/core/List';
 
 import '../assets/css/friendlist.scss';
 import FriendListItem, { STATE_FRIENDS, STATE_PENDING, STATE_REQUEST } from "./FriendListItem";

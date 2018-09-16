@@ -9,7 +9,9 @@ import IconButton              from '@material-ui/core/IconButton';
 import DeleteIcon              from '@material-ui/icons/Close';
 import AcceptIcon              from '@material-ui/icons/Done';
 import ListItem                from '@material-ui/core/ListItem';
+import CreaIcon                from '@material-ui/icons/LabelImportant';
 import PlayIcon                from '@material-ui/icons/PlayArrow';
+import WaitIcon                from '@material-ui/icons/HourglassEmpty';
 import Avatar                  from '@material-ui/core/Avatar';
 
 class FriendListItem extends Component {
@@ -33,9 +35,17 @@ class FriendListItem extends Component {
                     </ListItemSecondaryAction>;
                     break;
                 case STATE_FRIENDS:
+                    let iconButton = '';
+                    if (true) {
+                        iconButton = <IconButton> <PlayIcon/> </IconButton>
+                    } else if (true) {
+                        iconButton = <IconButton> <WaitIcon/> </IconButton>
+                    } else {
+                        iconButton = <IconButton> <CreaIcon/> </IconButton>
+                    }
                     rightside = <ListItemSecondaryAction>
                         <IconButton>
-                            <PlayIcon/>
+                            { iconButton }
                         </IconButton>
                     </ListItemSecondaryAction>;
                     break;

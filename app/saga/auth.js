@@ -6,6 +6,7 @@ import {
     readTokenAction,
     setTokenAction,
     updateTypedCredAction,
+    deleteTokenAction,
 }                  from "../actions/token_actions";
 import {call, put} from "redux-saga/effects";
 import jwt_decode  from "jwt-decode";
@@ -32,12 +33,7 @@ export function* checkToken(token, refresh, isMeRequest = false) {
                     yield put(fetchUserInfoAction());
                 }
             } else {
-                localStorage.removeItem("token");
-                localStorage.removeItem("refresh_token");
-                yield put(updateSnackbarAction({
-                    open: true,
-                    message: 'Veuillez vous reconnecter',
-                }));
+                yield put(deleteTokenAction());
                 return false;
             }
         }
