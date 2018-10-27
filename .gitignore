@@ -62,7 +62,7 @@ env.prod
 
 ###> symfony/framework-bundle ###
 /.env
-/public/bundles/
+/public/build/
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
