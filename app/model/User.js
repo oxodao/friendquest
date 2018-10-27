@@ -10,6 +10,11 @@ function mapFriendsToArray(friends) {
     return converted;
 }
 
+/**
+ * This is horribly wrong. Do not learn from this project at all.
+ * Please.
+ */
+
 export default class User {
 
     constructor(json) {
@@ -93,5 +98,11 @@ export default class User {
             }
         }
         return user;
+    }
+
+    updateOneFriend(friend, game) {
+        console.log("Updating friend ", friend);
+        console.log("With game ", game);
+        return this;
     }
 }

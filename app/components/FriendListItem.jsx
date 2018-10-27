@@ -2,14 +2,17 @@ export const STATE_REQUEST = 1;
 export const STATE_FRIENDS = 2;
 export const STATE_PENDING = 3;
 
-import React, { Component }    from 'react';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import { bindActionCreators }  from "redux";
+import React, { Component }    from 'react';
+import { fetchOneGame }        from "../actions/game_actions";
 import ListItemText            from '@material-ui/core/ListItemText';
+import { connect }             from "react-redux";
 import IconButton              from '@material-ui/core/IconButton';
 import DeleteIcon              from '@material-ui/icons/Close';
 import AcceptIcon              from '@material-ui/icons/Done';
 import ListItem                from '@material-ui/core/ListItem';
-import CreaIcon                from '@material-ui/icons/LabelImportant';
+import CreaIcon                from '@material-ui/icons/Add';
 import PlayIcon                from '@material-ui/icons/PlayArrow';
 import WaitIcon                from '@material-ui/icons/HourglassEmpty';
 import Avatar                  from '@material-ui/core/Avatar';
@@ -37,16 +40,16 @@ class FriendListItem extends Component {
                 case STATE_FRIENDS:
                     let iconButton = '';
                     if (!this.props.friend.game) {
-                        iconButton = <IconButton> <CreaIcon/> </IconButton>
+                        iconButton = <IconButton> <CreaIcon/> </IconButton>;
                     } else if (this.props.friend.game.myTurn) {
-                        iconButton = <IconButton> <PlayIcon/> </IconButton>
+                        iconButton = <IconButton onClick={() => {
+                            this.props.fetchGame();
+                        }}> <PlayIcon/> </IconButton>;
                     } else {
-                        iconButton = <IconButton> <WaitIcon/> </IconButton>
+                        iconButton = <IconButton> <WaitIcon/> </IconButton>;
                     }
                     rightside = <ListItemSecondaryAction>
-                        <IconButton>
-                            { iconButton }
-                        </IconButton>
+                        {iconButton}
                     </ListItemSecondaryAction>;
                     break;
                 case STATE_PENDING:

@@ -1,11 +1,12 @@
-import { addFriendAction, removeFriendAction } from "../actions/token_actions";
-import { bindActionCreators }                  from 'redux';
-import React, { Component }                    from 'react';
-import BackgroundUserImage                     from "./BackgroundUserImage";
-import ListSubheader                           from '@material-ui/core/ListSubheader';
-import { connect }                             from "react-redux";
-import NavBar                                  from './Navbar';
-import List                                    from '@material-ui/core/List';
+import { addFriendAction, removeFriendAction }                         from "../actions/token_actions";
+import { fetchOneGameAction }                                          from "../actions/game_actions";
+import { bindActionCreators }                                          from 'redux';
+import React, { Component }                                            from 'react';
+import BackgroundUserImage                                             from "./BackgroundUserImage";
+import ListSubheader                                                   from '@material-ui/core/ListSubheader';
+import { connect }                                                     from "react-redux";
+import NavBar                                                          from './Navbar';
+import List                                                            from '@material-ui/core/List';
 
 import '../assets/css/friendlist.scss';
 import FriendListItem, { STATE_FRIENDS, STATE_PENDING, STATE_REQUEST } from "./FriendListItem";
@@ -31,17 +32,21 @@ class FriendList extends Component {
 
             // Theses are only defined when the /me requests got back
             if (undefined !== this.props.user.requests) {
-                requests = this.props.user.requests.map(friend => <FriendListItem key={friend.id} friend={friend} state={STATE_REQUEST}
-                                                                          addFriend={() => this.props.addFriend({ user: friend.username })}
-                                                                          removeFriend={() => this.props.removeFriend({ user: friend.id })}/>);
+                requests = this.props.user.requests.map(friend => <FriendListItem key={friend.id} friend={friend}
+                                                                                  state={STATE_REQUEST}
+                                                                                  addFriend={() => this.props.addFriend({ user: friend.username })}
+                                                                                  removeFriend={() => this.props.removeFriend({ user: friend.id })}/>);
             }
 
             if (undefined !== this.props.user.friends) {
-                friends = this.props.user.friends.map(friend => <FriendListItem key={friend.id} friend={friend} state={STATE_FRIENDS}/>);
+                friends = this.props.user.friends.map(friend => <FriendListItem key={friend.id} friend={friend}
+                                                                                state={STATE_FRIENDS} fetchGame={() => { this.props.fetchGame({ friend }); }}/>);
             }
 
             if (undefined !== this.props.user.pendings) {
-                pendings = this.props.user.pendings.map(friend => <FriendListItem key={friend.id} friend={friend} state={STATE_PENDING} removeFriend={() => this.props.removeFriend({ user: friend.id })}/>);
+                pendings = this.props.user.pendings.map(friend => <FriendListItem key={friend.id} friend={friend}
+                                                                                  state={STATE_PENDING}
+                                                                                  removeFriend={() => this.props.removeFriend({ user: friend.id })}/>);
             }
         }
 
@@ -74,7 +79,8 @@ export default connect(
         user: state.tokenReducer.user,
     }),
     dispatch => ({
-        addFriend : bindActionCreators(addFriendAction, dispatch),
+        addFriend   : bindActionCreators(addFriendAction, dispatch),
         removeFriend: bindActionCreators(removeFriendAction, dispatch),
+        fetchGame   : bindActionCreators(fetchOneGameAction, dispatch),
     }),
 )(FriendList);
