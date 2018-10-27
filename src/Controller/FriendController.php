@@ -22,7 +22,7 @@ class FriendController extends SerializerAwareController
      */
     public function me(): Response
     {
-        return new SerializedRequest($this->serializer, $this->getUser(), ['Me', 'Friend.js'], true);
+        return new SerializedRequest($this->serializer, $this->getUser(), ['Me', 'Friend'], true);
     }
 
     /**

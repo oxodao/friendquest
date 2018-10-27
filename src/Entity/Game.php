@@ -111,4 +111,12 @@ class Game {
         return $this->answers->toArray();
     }
 
+    public function getOtherPlayer(User $currUser): User
+    {
+        if ($this->firstPlayer->getId() === $currUser->getId()) {
+            return $this->secondPlayer;
+        }
+        return $this->firstPlayer;
+    }
+
 }

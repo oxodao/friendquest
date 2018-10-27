@@ -62,7 +62,9 @@ class FQFixtures extends Fixture
         $friendships = [
             (new Friendship($users[3], $users[4]))->setState(Friendship::$STATE_PENDING),
             (new Friendship($users[2], $users[3]))->setState(Friendship::$STATE_PENDING),
-            (new Friendship($users[5], $users[3]))->setState(Friendship::$STATE_ACCEPTED)
+            (new Friendship($users[5], $users[3]))->setState(Friendship::$STATE_ACCEPTED),
+            (new Friendship($users[6], $users[3]))->setState(Friendship::$STATE_ACCEPTED),
+            (new Friendship($users[7], $users[3]))->setState(Friendship::$STATE_ACCEPTED)
         ];
 
 
@@ -71,70 +73,64 @@ class FQFixtures extends Fixture
         }
 
 
+        // We create a game between 3 and 5 which just started (No answers yet)
         $game = new Game($users[3]);
         $game->setSecondPlayer($users[5]);
         $om->persist($game);
 
-        $game2 = new Game($users[1]);
-        $game2->setSecondPlayer($users[2]);
-        $game2->nextTurn();
+        // We create a game between 3 and 6 which one player responded
+        $game2= new Game($users[3]);
+        $game2->setSecondPlayer($users[6]);
         $om->persist($game2);
 
-        $questions = [
-            [
-                "Would you go in vacation with your best friend ?",
-                false,
-                [
-                    "yes",
-                    "no"
-                ]
-            ],
-            [
-                "What do you fear the most ?",
-                false,
-                [
-                    "Spider",
-                    "Being alone",
-                    "Nothing, I'm a superhero"
-                ]
-            ],
-            [
-                "You get a billion dollar to spend, what do you use them for ?",
-                false,
-                [
-                    "Buy everything I've ever wanted",
-                    "Live wisely and save them",
-                    "Donate them to charity",
-                    "YOLO"
-                ]
-            ]
-        ];
+        // We create a game between 3 and 7 which both player responded
+        $game3= new Game($users[3]);
+        $game3->setSecondPlayer($users[7]);
+        $om->persist($game3);
 
-        $questionList = [];
+        $game4 = new Game($users[1]);
+        $game4->setSecondPlayer($users[2]);
+        $game4->nextTurn();
+        $om->persist($game4);
 
-        foreach ($questions as $question) {
-            $currQuest = new Question();
-            $currQuest->setQuestion($question[0]);
-            $currQuest->setAdult($question[1]);
-            foreach ($question[2] as $ans) {
-                $currQuest->addAnswer($ans);
-            }
+        $questionList = Generator::generateQuestions($om);
 
-            $questionList[] = $currQuest;
-            $om->persist($currQuest);
-        }
-
-        for ($i = 0; $i < count($questionList); ++$i)
+        for ($i = 0; $i < 2; ++$i)
         {
             $answer = new Answer($game, $questionList[$i], $i);
             $game->addAnswer($answer);
 
             $answer2 = new Answer($game2, $questionList[$i], $i);
             $game2->addAnswer($answer2);
+
+            $answer3 = new Answer($game3, $questionList[$i], $i);
+            $game3->addAnswer($answer3);
+
+            $answer4 = new Answer($game4, $questionList[$i], $i);
+            $game4->addAnswer($answer4);
+        }
+
+        for ($i = 2; $i < 4; ++$i) {
+            $answer2 = new Answer($game2, $questionList[$i], $i);
+            $answer2->setCorrectAnswer(0);
+            $game2->addAnswer($answer2);
+
+            $answer3 = new Answer($game3, $questionList[$i], $i);
+            $answer3->setCorrectAnswer(0);
+            $game3->addAnswer($answer3);
+        }
+
+        for ($i = 4; $i < 6; ++$i) {
+            $answer3 = new Answer($game3, $questionList[$i], $i);
+            $answer3->setCorrectAnswer(0);
+            $answer3->setPlayerAnswer(0);
+            $game3->addAnswer($answer3);
         }
 
         $om->persist($game);
         $om->persist($game2);
+        $om->persist($game3);
+        $om->persist($game4);
 
         $om->flush();
     }

@@ -100,9 +100,19 @@ export default class User {
         return user;
     }
 
-    updateOneFriend(friend, game) {
-        console.log("Updating friend ", friend);
-        console.log("With game ", game);
+    updateOneGame(game) {
+        let isFirstPlayer = game["firstPlayer"] == this.id;
+        let player = isFirstPlayer ? game["secondPlayer"] : game["firstPlayer"];
+        game["myTurn"] = game["isFirstPlayerTurn"] ? isFirstPlayer : !isFirstPlayer;
+
+        for (let friend of this.friends) {
+            if (friend.id == player) {
+                friend.game.hydrateGame(player, game);
+            }
+        }
+
+        console.log(this);
+
         return this;
     }
 }

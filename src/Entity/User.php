@@ -29,13 +29,13 @@ class User implements UserInterface, \Serializable
      * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="NONE")
-     * @Groups({"PlayerUUID", "Me", "Friend.js", "AddFriend" })
+     * @Groups({"PlayerUUID", "Me", "Friend", "AddFriend" })
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
-     * @Groups({"Me", "Friend.js", "AddFriend" })
+     * @Groups({"Me", "Friend", "AddFriend" })
      */
     private $username;
 
@@ -52,7 +52,7 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=1024)
-     * @Groups({"Me", "Friend.js"})
+     * @Groups({"Me", "Friend"})
      */
     private $image;
 

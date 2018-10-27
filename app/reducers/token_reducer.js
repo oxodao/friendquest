@@ -51,7 +51,7 @@ export default function (state = initialState, action) {
             return { ...state, user: state.user.updateGames(action.payload.results) };
 
         case GOT_ONE_GAME:
-            return { ...state, user: state.user.updateOneFriend(action.payload.friend, action.payload.game) };
+            return { ...state, user: state.user.updateOneGame(action.payload.game) };
 
         default:
             return state;
