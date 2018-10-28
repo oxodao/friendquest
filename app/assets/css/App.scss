@@ -13,17 +13,15 @@ body {
 .App {
   @extend %set-width;
 
-  margin         : auto;
-  height         : 100vh;
+  margin        : auto;
+  height        : 100vh;
   //display        : flex;
   //flex-direction : column;
-  display: grid;
-  grid-template:
-      "header" 5em
-      "router" auto;
+  display       : grid;
+  grid-template : "header" 5em "router" auto;
 
   #Main_Header {
-    grid-area: header;
+    grid-area      : header;
     background     : linear-gradient(to right, rgba(#ee32ff, .7) 0%, rgba(#898bff, .7) 100%);
     border-radius  : 0 0 10px 10px;
     box-shadow     : 0 0px 10px #111111;
@@ -54,28 +52,30 @@ body {
   }
 }
 
+.ingame {
+  grid-template : "game" !important;
+}
+
 #Router {
-  grid-area: router;
-  height: calc(100vh - 5em);
+  grid-area : router;
+  height    : calc(100vh - 5em);
 
   .container {
-    height: 100%;
+    height : 100%;
 
-    .innerContainer { 
-      height: 100%;
-      display: grid;
-      grid-template:
-          "a" minmax(auto, 100%)
-          "b" auto;
-     }
+    .innerContainer {
+      height        : 100%;
+      display       : grid;
+      grid-template : "a" minmax(auto, 100%) "b" auto;
+    }
 
     .content {
-      padding-top    : 10px;
-      grid-area: a;
-      overflow-y: scroll;
+      padding-top : 10px;
+      grid-area   : a;
+      overflow-y  : scroll;
     }
     .NavBar {
-      grid-area: b;
+      grid-area : b;
     }
   }
 }

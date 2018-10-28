@@ -1,7 +1,7 @@
-import { gotGamesAction, gotOneGameAction } from "../actions/game_actions";
-import {put, call, select}                 from "redux-saga/effects";
-import { checkToken }                      from "./auth";
-import { updateSnackbarAction }            from "../actions/snackbar_actions";
+import {displayOneGame, gotGamesAction, gotOneGameAction} from '../actions/game_actions';
+import {put, call, select}                                from "redux-saga/effects";
+import { checkToken }                                     from "./auth";
+import { updateSnackbarAction }                           from "../actions/snackbar_actions";
 export function* getGames() {
     let url = '/api/games';
 
@@ -51,6 +51,9 @@ export function* getOneGame(action) {
         if (200 === res.status) {
             let resp = yield call([res, 'json']);
             yield put(gotOneGameAction({ user: action.payload.friend, game: resp }));
+            if (resp['id']) {
+                yield put(displayOneGame({ gameID: resp["id"], state: 0}));
+            }
         } else {
             yield put(updateSnackbarAction({
                 open: true,

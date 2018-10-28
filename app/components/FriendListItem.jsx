@@ -3,11 +3,11 @@ export const STATE_FRIENDS = 2;
 export const STATE_PENDING = 3;
 
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import { bindActionCreators }  from "redux";
-import React, { Component }    from 'react';
-import { fetchOneGame }        from "../actions/game_actions";
+import {bindActionCreators}    from 'redux';
+import React, {Component}      from 'react';
+import {fetchOneGame}          from '../actions/game_actions';
 import ListItemText            from '@material-ui/core/ListItemText';
-import { connect }             from "react-redux";
+import {connect}               from 'react-redux';
 import IconButton              from '@material-ui/core/IconButton';
 import DeleteIcon              from '@material-ui/icons/Close';
 import AcceptIcon              from '@material-ui/icons/Done';

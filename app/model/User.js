@@ -111,8 +111,6 @@ export default class User {
             }
         }
 
-        console.log(this);
-
         return this;
     }
 }

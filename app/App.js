@@ -1,30 +1,31 @@
-import React, { Component }            from 'react';
-import { HashRouter as Router, Route } from 'react-router-dom';
-import Login                           from './components/Login';
-import red                             from "@material-ui/core/es/colors/red";
-import MuiThemeProvider                from "@material-ui/core/es/styles/MuiThemeProvider";
-import { createMuiTheme }              from '@material-ui/core/styles';
-import { connect }                     from "react-redux";
-import SnackbarCustom                  from "./components/SnackbarCustom";
-import FriendList                      from "./components/FriendList";
-import UserImage                       from "./assets/images/default.svg";
-import Settings                        from "./components/Settings";
-import { fetchUserInfoAction }         from "./actions/token_actions";
-import { bindActionCreators }          from "redux";
+import React, {Component}            from 'react';
+import {HashRouter as Router, Route} from 'react-router-dom';
+import Login                         from './components/Login';
+import red                           from '@material-ui/core/es/colors/red';
+import MuiThemeProvider              from '@material-ui/core/es/styles/MuiThemeProvider';
+import {createMuiTheme}              from '@material-ui/core/styles';
+import {connect}                     from 'react-redux';
+import SnackbarCustom                from './components/SnackbarCustom';
+import FriendList                    from './components/FriendList';
+import UserImage                     from './assets/images/default.svg';
+import Settings                      from './components/Settings';
+import {fetchUserInfoAction}         from './actions/token_actions';
+import {bindActionCreators}          from 'redux';
 
 import './assets/css/App.scss';
 import './assets/images/background.jpg';
-import Search from "./components/Search";
+import Search                        from './components/Search';
+import GameInstance                  from './components/GameInstance';
 
 class App extends Component {
 
     render() {
         const theme = createMuiTheme({
-            palette: {
-                type   : 'dark',
-                primary: red,
-            },
-        });
+                                         palette: {
+                                             type   : 'dark',
+                                             primary: red,
+                                         },
+                                     });
 
         let logged       = this.props.user !== null && this.props.user !== undefined;
         let imageNotNull = logged && this.props.user.image !== null;
@@ -36,10 +37,12 @@ class App extends Component {
             <h2>{username}</h2>
         </div>;
 
+        let game = '';
 
-        return (
-            <MuiThemeProvider theme={createMuiTheme(theme)}>
-                <div className="App">
+        if (this.props.game.gameID !== undefined && this.props.game.gameID !== null) {
+            game = <div className="App ingame"><GameInstance/></div>;
+        } else {
+            game = <div className="App">
                     {header}
                     <Router>
                         <div id="Router">
@@ -51,7 +54,12 @@ class App extends Component {
 
                     <Login/>
                     <SnackbarCustom/>
-                </div>
+                </div>;
+        }
+
+        return (
+            <MuiThemeProvider theme={createMuiTheme(theme)}>
+                { game }
             </MuiThemeProvider>
         );
     }
@@ -60,6 +68,7 @@ class App extends Component {
 export default connect(
     state => ({
         user: state.tokenReducer.user,
+        game: state.gameReducer,
     }),
     dispatch => ({
         fetchUserInfo: bindActionCreators(fetchUserInfoAction, dispatch),
