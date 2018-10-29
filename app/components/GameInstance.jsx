@@ -2,7 +2,6 @@ import {bindActionCreators} from 'redux';
 import {displayOneGame}     from '../actions/game_actions';
 import {Component}          from 'react';
 import {connect}            from 'react-redux';
-import Button               from '@material-ui/core/es/Button/Button';
 import React                from 'react';
 
 import '../assets/css/GameInstance.scss';

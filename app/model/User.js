@@ -101,12 +101,12 @@ export default class User {
     }
 
     updateOneGame(game) {
-        let isFirstPlayer = game["firstPlayer"] == this.id;
+        let isFirstPlayer = game["firstPlayer"] === this.id;
         let player = isFirstPlayer ? game["secondPlayer"] : game["firstPlayer"];
         game["myTurn"] = game["isFirstPlayerTurn"] ? isFirstPlayer : !isFirstPlayer;
 
         for (let friend of this.friends) {
-            if (friend.id == player) {
+            if (friend.id === player) {
                 friend.game.hydrateGame(player, game);
             }
         }

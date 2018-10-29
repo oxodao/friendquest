@@ -24,6 +24,7 @@ class FriendList extends Component {
 
     render() {
 
+        let background = '';
         let friends  = '';
         let requests = '';
         let pendings = '';
@@ -48,10 +49,11 @@ class FriendList extends Component {
                                                                                   state={STATE_PENDING}
                                                                                   removeFriend={() => this.props.removeFriend({ user: friend.id })}/>);
             }
+            background = <BackgroundUserImage user={this.props.user}/>;
         }
 
         return <div className="container">
-            <BackgroundUserImage user={this.props.user}/>
+            {background}
             <div className="innerContainer">
                 <div className="content">
                     <List id="FriendList" className="darken" subheader={<li/>}>

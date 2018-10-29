@@ -1,31 +1,38 @@
 #PLAYING {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
+  width           : 100%;
+  height          : 100%;
+  position        : relative;
+  display         : flex;
+  flex-direction  : column;
+  justify-content : space-around;
+  align-items     : center;
 
   #avatar {
-    height: 30%;
-    border-radius: 50%;
+    width         : 30vh;
+    height        : 30vh;
+    border-radius : 50%;
+    object-fit    : cover;
+    border        : 5px solid red;
   }
 
-  h1 {
-    font-size: 1em;
-    text-align: center;
-    margin: 0 20px 0 20px;
+  #question {
+    background-color: rgba(255, 255, 255, .8);
+    text-align : center;
+    padding : 0 0 5px 0;
+    width: 100%;
+
+    h1 {
+      font-size  : 1em;
+    }
   }
 
   #answers {
-    display: flex;
-    flex-direction: column;
-    width: 80%;
+    display        : flex;
+    flex-direction : column;
+    width          : 80%;
 
     button {
-      margin: 5px 0 5px 0;
+      margin : 5px 0 5px 0;
     }
 
   }

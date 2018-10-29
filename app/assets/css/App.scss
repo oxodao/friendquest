@@ -53,7 +53,8 @@ body {
 }
 
 .ingame {
-  grid-template : "game" !important;
+//  grid-template : "game" !important;
+  display:flex;
 }
 
 #Router {
