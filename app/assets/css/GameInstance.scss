@@ -1,3 +1,5 @@
+@import "config";
+
 #PLAYING {
   width           : 100%;
   height          : 100%;
@@ -6,6 +8,12 @@
   flex-direction  : column;
   justify-content : space-around;
   align-items     : center;
+
+  #close-bt {
+    position : absolute;
+    top      : 10px;
+    left     : calc(50% - 15em);
+  }
 
   #avatar {
     width         : 30vh;
@@ -16,23 +24,24 @@
   }
 
   #question {
-    background-color: rgba(255, 255, 255, .8);
-    text-align : center;
-    padding : 0 0 5px 0;
-    width: 100%;
+    background-color : rgba(255, 255, 255, .8);
+    text-align       : center;
+    padding          : 0 0 5px 0;
+    width            : 100%;
 
     h1 {
-      font-size  : 1em;
+      font-size : 1em;
     }
   }
 
   #answers {
     display        : flex;
     flex-direction : column;
-    width          : 80%;
+    width          : 100%;
 
     button {
-      margin : 5px 0 5px 0;
+      margin : 5px auto 5px auto;
+      width  : 80%;
     }
 
   }

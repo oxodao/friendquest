@@ -6,6 +6,7 @@ import React                from 'react';
 
 import '../assets/css/GameInstance.scss';
 import DoAnswer             from './answers/DoAnswer';
+import ShowAnswer           from './answers/ShowAnswer';
 
 class GameInstance extends Component {
 
@@ -27,9 +28,9 @@ class GameInstance extends Component {
             let currAnswer = this.friend.game.answers[this.props.game.state];
 
             if (currAnswer.playerAnswer === null || currAnswer.correctAnswer === null) {
-                return <DoAnswer friend={this.friend} answer={currAnswer}/>
+                return <DoAnswer friend={this.friend} answer={currAnswer} closeGame={this.props.displayOneGame}/>
             } else {
-                return <ShowAnswer/>
+                return <ShowAnswer friend={this.friend} answer={currAnswer} />
             }
         }
         return "";
