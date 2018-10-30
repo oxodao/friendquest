@@ -30,7 +30,7 @@ class GameInstance extends Component {
             if (currAnswer.playerAnswer === null || currAnswer.correctAnswer === null) {
                 return <DoAnswer friend={this.friend} answer={currAnswer} closeGame={this.props.displayOneGame}/>
             } else {
-                return <ShowAnswer friend={this.friend} answer={currAnswer} />
+                return <ShowAnswer friend={this.friend} answer={currAnswer} user={this.props.user} closeGame={this.props.displayOneGame}/>
             }
         }
         return "";

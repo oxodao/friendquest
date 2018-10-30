@@ -4,6 +4,7 @@ export default class Game {
 
     constructor(isFirstPlayer, gameArray) {
         this.id = gameArray['id'];
+        this.isFirstPlayer = isFirstPlayer;
         this.friend = isFirstPlayer ? gameArray["secondPlayer"] : gameArray["firstPlayer"];
         this.myTurn = (isFirstPlayer && gameArray['isFirstPlayerTurn']) || (!isFirstPlayer && !gameArray['isFirstPlayerTurn']);
         this.answers = [];

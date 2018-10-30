@@ -6,7 +6,7 @@ import BackgroundUserImage from '../BackgroundUserImage';
 import CloseIcon           from '@material-ui/icons/Close';
 import {DEFAULT_GAME}      from '../../actions/game_actions';
 
-class DoAnswer extends Component {
+class ShowAnswer extends Component {
 
     closeGame() {
         this.props.closeGame(DEFAULT_GAME);
@@ -21,8 +21,10 @@ class DoAnswer extends Component {
         let game = this.props.answer;
         let answers = game.question.answers;
 
-        console.log(this.props);
+        let myAnswer = game.isFirstPlayer ? answers[game.playerAnswer] : answers[game.correctAnswer];
+        let hisAnswer = !game.isFirstPlayer ? answers[game.playerAnswer] : answers[game.correctAnswer];
 
+        let style = myAnswer == hisAnswer ? "correct" : "wrong";
 
         return <div id="PLAYING">
             <BackgroundUserImage user={this.props.friend}/>
@@ -34,17 +36,24 @@ class DoAnswer extends Component {
             <div id="question">
                 <h1>{this.props.answer.question.text}</h1>
             </div>
-            <div id="answers">
-                <div id="">{answers[game.playerAnswer]}</div>
-                <div id="">{answers[game.correctAnswer]}</div>
+            <div id="showAnswers" class="answers">
+                <div id="firstAnswer" class="line">
+                    <div className={"right " + style}>{myAnswer}</div>
+                    <img src={this.props.user.image} />
+                </div>
+                <div id="secondAnswer" class="line">
+                    <img src={this.props.friend.image} />
+                    <div className={"left " + style}>{hisAnswer}</div>
+                </div>
             </div>
         </div>;
     }
 }
 
-DoAnswer.propTypes = {
+ShowAnswer.propTypes = {
+    user: PropTypes.object.isRequired,
     friend: PropTypes.object.isRequired,
     answer: PropTypes.object.isRequired,
 };
 
-export default DoAnswer;
+export default ShowAnswer;
