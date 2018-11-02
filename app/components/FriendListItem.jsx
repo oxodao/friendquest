@@ -1,3 +1,5 @@
+import { imageURL } from "../config";
+
 export const STATE_REQUEST = 1;
 export const STATE_FRIENDS = 2;
 export const STATE_PENDING = 3;
@@ -65,7 +67,7 @@ class FriendListItem extends Component {
         }
 
         return <ListItem className="darker-blue" key={this.props.friend.id}>
-            <Avatar alt={this.props.friend.username} src={this.props.friend.image}/>
+            <Avatar alt={this.props.friend.username} src={imageURL + this.props.friend.username + "_small.png"}/>
             <ListItemText primary={this.props.friend.username}/>
             {rightside}
         </ListItem>;

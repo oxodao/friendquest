@@ -32,7 +32,6 @@ class UserNormalizer implements NormalizerInterface, DenormalizerInterface
         return [
             "id" => $u->getId(),
             "username" => $u->getUsername(),
-            "image" => $u->getImage(),
             "state" => $state
         ];
     }
@@ -68,7 +67,7 @@ class UserNormalizer implements NormalizerInterface, DenormalizerInterface
         if ($hasGroups && in_array('PlayerUUID', $context['groups']))
             return $object->getId();
 
-        $user = ["id" => $object->getId(), "username" => $object->getUsername(), "image" => $object->getImage()];
+        $user = ["id" => $object->getId(), "username" => $object->getUsername()];
 
         if (!$hasGroups || ($hasGroups && !in_array('AddFriend', $context['groups']))) {
             $user['friends'] = [];

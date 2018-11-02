@@ -192,17 +192,6 @@ class User implements UserInterface, \Serializable
         return $friendship;
     }
 
-    public function getImage(): string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): User
-    {
-       $this->image = $image;
-       return $this;
-    }
-
     /**
      * Gives an array containing all games that the user is playing
      */
