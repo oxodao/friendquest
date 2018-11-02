@@ -20,13 +20,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class FQFixtures extends Fixture
 {
 
-    private $images = [
-        "https://i.pinimg.com/736x/63/a5/e8/63a5e8ee8cdcfab2f952bcd46a73e5c4--mr-bean-profile-pictures.jpg",
-        "https://d12swbtw719y4s.cloudfront.net/images/mC3EpqFj/y1W3RXWxGo476VSa8h5X/Profile_image_random.jpeg?w=620",
-        "https://gocartoonme.com/wp-content/uploads/2015/04/cartoon-me.png",
-        "https://i.ytimg.com/vi/lDM2ATylrtw/maxresdefault.jpg"
-    ];
-
     /** @var UserPasswordEncoderInterface */
     private $encoder;
 
@@ -47,9 +40,6 @@ class FQFixtures extends Fixture
             $user->setPassword($this->encoder->encodePassword($user, "user-" . $i));
             $user->setEmail("user-$i@friendsquest.dev");
             $user->setRoles(['ROLE_USER']);
-
-            $rand = rand(0, count($this->images) - 1);
-            $user->setImage($this->images[$rand]);
 
             $users[] = $user;
 

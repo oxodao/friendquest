@@ -51,12 +51,6 @@ class User implements UserInterface, \Serializable
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=1024)
-     * @Groups({"Me", "Friend"})
-     */
-    private $image;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Game", mappedBy="firstPlayer")
      */
     private $initializedGames;

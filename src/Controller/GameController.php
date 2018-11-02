@@ -5,7 +5,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Game;
 use App\Response\ErrorResponse;
 use App\Serialization\SerializedRequest;
 use Symfony\Component\HttpFoundation\Response;
