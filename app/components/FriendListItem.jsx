@@ -67,7 +67,7 @@ class FriendListItem extends Component {
         }
 
         return <ListItem className="darker-blue" key={this.props.friend.id}>
-            <Avatar alt={this.props.friend.username} src={imageURL + this.props.friend.username + "_small.png"}/>
+            <Avatar alt={this.props.friend.username} src={imageURL + this.props.friend.username + "_small.png"} onError={() => {console.log("LOL", this, this.src);this.src = imageURL + "default_small.png"}} onAbort={() => {console.log("LOL", this, this.src);this.src = imageURL + "default_small.png"}}/>
             <ListItemText primary={this.props.friend.username}/>
             {rightside}
         </ListItem>;
