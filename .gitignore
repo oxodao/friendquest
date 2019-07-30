@@ -83,3 +83,5 @@ env.prod
 /node_modules/
 
 /public/build/
+
+public/userimages/user-*.png
